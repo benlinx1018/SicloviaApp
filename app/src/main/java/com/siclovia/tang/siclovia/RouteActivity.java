@@ -1,8 +1,12 @@
 package com.siclovia.tang.siclovia;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,35 +17,38 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class RouteActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
+public class RouteActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
+    public DrawerLayout drawMenu;
+    private SupportMapFragment mapFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
+        mapFragment = SupportMapFragment.newInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawMenu = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawMenu, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawMenu.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //取得google maps
+        mapFragment.getMapAsync(this);
     }
 
+    /**
+     * 處理返回鍵事件
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -59,6 +66,11 @@ public class RouteActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * 設定上方Option被選取時的處理
+     * @param item 項目
+     * @return 是否成功
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -74,28 +86,58 @@ public class RouteActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 設定側邊選單被選取時的事件處理
+     * @param item 項目
+     * @return 是否成功
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-//
-//        if (id == R.id.nav_camara) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+
+        Fragment fragment = null;
+        android.support.v4.app.FragmentManager sfm = getSupportFragmentManager();
+        if (mapFragment.isAdded())
+        {
+            sfm.beginTransaction().hide(mapFragment).commit();
+        }
+
+        switch (id){
+            case R.id.nav_sponsers:
+                fragment = new Sponsors();
+                break;
+            case R.id.nav_schedule:
+                fragment = Schedule.newInstance(1);
+                break;
+            case R.id.nav_route:
+                if (!mapFragment.isAdded()) {
+                    sfm.beginTransaction().add(R.id.map_frame, mapFragment).commit();
+                }
+                else
+                {
+                    sfm.beginTransaction().show(mapFragment).commit();
+                }
+                break;
+            default:
+
+                break;
+
+        }
+        if(fragment!=null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+        }
+        drawMenu.closeDrawer(GravityCompat.START);
         return true;
+    }
+    //設定地圖相關(加上標記)
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 }

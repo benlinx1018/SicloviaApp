@@ -2,6 +2,7 @@ package com.siclovia.tang.siclovia;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class RouteActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
     public DrawerLayout drawMenu;
@@ -29,15 +34,23 @@ public class RouteActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
+        //建立new Fragment for google map
         mapFragment = SupportMapFragment.newInstance();
+        //設定toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        //建立選單
         drawMenu = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawMenu, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawMenu,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //toggle.setDrawerIndicatorEnabled(false);
+        //toggle.setHomeAsUpIndicator(R.drawable.siclovia);
+
         drawMenu.setDrawerListener(toggle);
+
+
+
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -140,4 +153,6 @@ public class RouteActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
 
     }
+
+
 }

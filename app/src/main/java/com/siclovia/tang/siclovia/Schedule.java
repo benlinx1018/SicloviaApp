@@ -3,16 +3,23 @@ package com.siclovia.tang.siclovia;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.siclovia.tang.siclovia.dummy.DummyContent;
-import com.siclovia.tang.siclovia.dummy.DummyContent.DummyItem;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.*;
+import cz.msebera.android.httpclient.Header;
 
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,11 +29,9 @@ import java.util.List;
  * interface.
  */
 public class Schedule extends Fragment {
+    EventRecyclerViewAdapter adapter;
+    public List<Event> events = new ArrayList<>();
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -40,36 +45,56 @@ public class Schedule extends Fragment {
     @SuppressWarnings("unused")
     public static Schedule newInstance(int columnCount) {
         Schedule fragment = new Schedule();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
+
+
         return fragment;
+    }
+
+    public class Events {
+
+        public List<Event> events;
+
+        public Events() {
+            events = new ArrayList<>();
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://joinymca.org/siclovia/json/events.php", new TextHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String res) {
+                        Gson gson = new GsonBuilder().create();
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+                        // Define Response class to correspond to the JSON response returned
+                        Events eventsObj =  gson.fromJson(res,Events.class);
+                        events.addAll(eventsObj.events);
+                        adapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                    }
+                }
+        );
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_list, container, false);
-
+        View eventListView =  view.findViewById(R.id.list);
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new EventRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        if (eventListView instanceof RecyclerView) {
+            Context context = eventListView.getContext();
+            RecyclerView recyclerView = (RecyclerView) eventListView;
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            adapter = new EventRecyclerViewAdapter(events, mListener);
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
@@ -104,6 +129,6 @@ public class Schedule extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        //void onListFragmentInteraction(DummyItem item);
     }
 }

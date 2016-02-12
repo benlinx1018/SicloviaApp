@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Event> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public EventRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public EventRecyclerViewAdapter(List<Event> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -35,11 +35,13 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        //holder.mItem = mValues.get(position);
+        holder.txtTime.setText(mValues.get(position).time);
+        holder.txtAmpm.setText(mValues.get(position).ampm);
+        holder.txtTitle.setText(mValues.get(position).title);
+        holder.txtSubTitle.setText(mValues.get(position).subTitle);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        /*holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
@@ -48,7 +50,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -57,21 +59,21 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
-
+        public final TextView txtTime,txtAmpm,txtTitle,txtSubTitle;
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            txtAmpm = (TextView) view.findViewById(R.id.event_txtAmpm);
+            txtTime = (TextView) view.findViewById(R.id.event_txtTime);
+            txtTitle = (TextView) view.findViewById(R.id.event_txtTitle);
+            txtSubTitle = (TextView) view.findViewById(R.id.event_txtSubTitle);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + txtTitle.getText() + "'";
         }
     }
+
+
+
 }

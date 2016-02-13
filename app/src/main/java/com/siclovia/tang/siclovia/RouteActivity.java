@@ -2,13 +2,9 @@ package com.siclovia.tang.siclovia;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.os.AsyncTask;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 
-import android.view.Gravity;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,10 +17,6 @@ import android.view.MenuItem;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class RouteActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
@@ -120,10 +112,12 @@ public class RouteActivity extends AppCompatActivity
 
         switch (id){
             case R.id.nav_sponsers:
-                fragment = new Sponsors();
+                fragment = new SponsorFragment();
+                drawMenu.setBackgroundResource(R.drawable.sponsor_bg);
                 break;
             case R.id.nav_schedule:
-                fragment = Schedule.newInstance(1);
+                fragment = ScheduleFragment.newInstance();
+                drawMenu.setBackgroundResource(R.drawable.event_bg);
                 break;
             case R.id.nav_route:
                 if (!mapFragment.isAdded()) {
@@ -133,6 +127,7 @@ public class RouteActivity extends AppCompatActivity
                 {
                     sfm.beginTransaction().show(mapFragment).commit();
                 }
+                drawMenu.setBackgroundColor(Color.parseColor("#FCD214") );
                 break;
             default:
 

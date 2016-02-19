@@ -2,19 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_sponsers" android:icon="@mipmap/ic_sponsor"
-            android:title="SPONSORS" />
-        <item android:id="@+id/nav_schedule" android:icon="@android:drawable/ic_menu_gallery"
+        <item
+            android:id="@+id/nav_sponsers"
+            android:icon="@mipmap/ic_sponsor"
+            android:title="SPONSORS"/>
+        <item
+            android:id="@+id/nav_schedule"
+            android:icon="@android:drawable/ic_menu_gallery"
             android:title="SCHEDULE" />
-        <item android:id="@+id/nav_route" android:icon="@android:drawable/ic_menu_slideshow"
+        <item
+            android:id="@+id/nav_route"
+            android:icon="@android:drawable/ic_menu_slideshow"
             android:title="ROUTE" />
-        <item android:id="@+id/nav_safety" android:icon="@android:drawable/ic_menu_manage"
+        <item
+            android:id="@+id/nav_safety"
+            android:icon="@android:drawable/ic_menu_manage"
             android:title="SAFETY" />
-        <item android:id="@+id/nav_donate" android:icon="@android:drawable/ic_menu_manage"
+        <item
+            android:id="@+id/nav_donate"
+            android:icon="@android:drawable/ic_menu_manage"
             android:title="DONATE" />
-        <item android:id="@+id/nav_gallery" android:icon="@android:drawable/ic_menu_manage"
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@android:drawable/ic_menu_manage"
             android:title="GALLERY" />
-        <item android:id="@+id/nav_social" android:icon="@android:drawable/ic_menu_manage"
+        <item
+            android:id="@+id/nav_social"
+            android:icon="@android:drawable/ic_menu_manage"
             android:title="SOCIAL" />
     </group>
 

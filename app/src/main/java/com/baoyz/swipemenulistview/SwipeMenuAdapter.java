@@ -53,6 +53,7 @@ public class SwipeMenuAdapter implements WrapperListAdapter,
             createMenu(menu);
             SwipeMenuView menuView = new SwipeMenuView(menu,
                     (SwipeMenuListView) parent);
+            //menuView.setPadding(0,6,0,0);
             menuView.setOnSwipeItemClickListener(this);
             SwipeMenuListView listView = (SwipeMenuListView) parent;
             layout = new SwipeMenuLayout(contentView, menuView,

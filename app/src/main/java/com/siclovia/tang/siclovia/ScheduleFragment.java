@@ -26,12 +26,7 @@ import cz.msebera.android.httpclient.Header;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
+
 public class ScheduleFragment extends Fragment {
     EventAdapter eventAdapter = new EventAdapter();
     public List<Event> events = new ArrayList<>();
@@ -170,7 +165,6 @@ public class ScheduleFragment extends Fragment {
             if (convertView == null) {
                 convertView = View.inflate(getActivity().getApplicationContext(),
                         R.layout.fragment_event, null);
-
             }
             ViewHolder holder =  new ViewHolder(convertView);
             Event item = getItem(position);

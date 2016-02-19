@@ -134,16 +134,19 @@ public class SwipeMenuLayout extends FrameLayout {
 
 		LayoutParams contentParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-
+        LayoutParams menuParams = new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        // TODO:setting list margins
+        contentParams.setMargins(0, 5, 0, 0);
 		mContentView.setLayoutParams(contentParams);
-		//mContentView.setPadding(0,5,0,0);
+
         if (mContentView.getId() < 1) {
 			mContentView.setId(CONTENT_VIEW_ID);
 		}
 
-		mMenuView.setId(MENU_VIEW_ID);
-		mMenuView.setLayoutParams(contentParams);
-        //mMenuView.setPadding(0, 5, 0, 0);
+        mMenuView.setId(MENU_VIEW_ID);
+
+        mMenuView.setLayoutParams(menuParams);
         addView(mContentView);
 		addView(mMenuView);
 
@@ -185,7 +188,7 @@ public class SwipeMenuLayout extends FrameLayout {
 			// Log.i("byz", "downX = " + mDownX + ", moveX = " + event.getX());
 			int dis = (int) (mDownX - event.getX());
 			if (state == STATE_OPEN) {
-				dis += mMenuView.getWidth()*mSwipeDirection;;
+				dis += mMenuView.getWidth()*mSwipeDirection;
 			}
 			swipe(dis);
 			break;
@@ -321,15 +324,16 @@ public class SwipeMenuLayout extends FrameLayout {
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		mContentView.layout(0, 0, getMeasuredWidth(),
-				mContentView.getMeasuredHeight());
-		if (mSwipeDirection == SwipeMenuListView.DIRECTION_LEFT) {
-			mMenuView.layout(getMeasuredWidth(), 0,
-					getMeasuredWidth() + mMenuView.getMeasuredWidth(),
-					mContentView.getMeasuredHeight());
-		} else {
-			mMenuView.layout(-mMenuView.getMeasuredWidth(), 0,
-					0, mContentView.getMeasuredHeight());
-		}
+                mContentView.getMeasuredHeight());
+
+        if (mSwipeDirection == SwipeMenuListView.DIRECTION_LEFT) {
+            mMenuView.layout(getMeasuredWidth(), 0,
+                    getMeasuredWidth() + mMenuView.getMeasuredWidth(),
+                    mContentView.getMeasuredHeight());
+        } else {
+            mMenuView.layout(-mMenuView.getMeasuredWidth(), 0,
+                    0, mContentView.getMeasuredHeight());
+        }
 	}
 
 	public void setMenuHeight(int measuredHeight) {

@@ -65,6 +65,7 @@ public class SwipeMenuListView extends ListView {
         super.setAdapter(new SwipeMenuAdapter(getContext(), adapter) {
             @Override
             public void createMenu(SwipeMenu menu) {
+
                 if (mMenuCreator != null) {
                     mMenuCreator.create(menu);
                 }

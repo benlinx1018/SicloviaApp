@@ -2,11 +2,6 @@ package com.siclovia.tang.siclovia;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-
 public class Event {
     @SerializedName("name")
     public String title;
@@ -16,4 +11,11 @@ public class Event {
     public String time;
     @SerializedName("ampm")
     public String ampm;
+    @SerializedName("lat")
+    public String lat;
+    @SerializedName("long")
+    public String lon;
+    @SerializedName("date")
+    public String date;
+
 }

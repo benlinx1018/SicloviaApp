@@ -1,22 +1,22 @@
 package com.siclovia.tang.siclovia;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.siclovia.tang.siclovia.dummy.DummyContent;
-import com.siclovia.tang.siclovia.dummy.DummyContent.DummyItem;
 
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +25,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class SponsorFragment extends Fragment {
     SponsorRecyclerViewAdapter sponsorAdapter;
-    public List<SponsorRecyclerViewAdapter.Sponsor> sponsors ;
+    public final List<Sponsor> sponsors = new ArrayList<>();
 
 
 
@@ -34,31 +34,45 @@ public class SponsorFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public SponsorFragment() {
-        sponsors= new ArrayList<>();
-        sponsorAdapter =new SponsorRecyclerViewAdapter(sponsors);
-
     }
 
     @SuppressWarnings("unused")
     public static SponsorFragment newInstance() {
         SponsorFragment fragment = new SponsorFragment();
+    
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://joinymca.org/siclovia/json/sponsors.php", new TextHttpResponseHandler() {
+        //initialize adapter
+        sponsorAdapter =new SponsorRecyclerViewAdapter(sponsors);
+        //get all sponsors
+        new AsyncHttpClient().get("http://joinymca.org/siclovia/json/sponsors.php", new TextHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String res) {
                         Gson gson = new GsonBuilder().create();
-
-                        // Define Response class to correspond to the JSON response returned
+                        //Serialize Json Data
                         Sponsors sponsorsObj = gson.fromJson(res, Sponsors.class);
+                        //add to adapter list
                         sponsors.addAll(sponsorsObj.sponsors);
-                        sponsorAdapter.notifyDataSetChanged();
+                        //get each sponsor's web logo Image
+                        for (final Sponsor sponsor : sponsors) {
+                            AsyncHttpClient client = new AsyncHttpClient();
+                            String logoUri = "http://www.joinymca.org/siclovia/images/sponsors/" + sponsor.logoFileName;
+                            client.get(logoUri, new FileAsyncHttpResponseHandler(getActivity().getBaseContext()) {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, File response) {
+                                    sponsor.logoImage = BitmapFactory.decodeFile(response.getPath());
+                                    sponsorAdapter.notifyDataSetChanged();
+                                }
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
 
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -70,7 +84,7 @@ public class SponsorFragment extends Fragment {
     }
     class Sponsors {
 
-        public List<SponsorRecyclerViewAdapter.Sponsor> sponsors;
+        public List<Sponsor> sponsors;
 
         public Sponsors() {
             sponsors = new ArrayList<>();
@@ -79,17 +93,17 @@ public class SponsorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sponsor_list, container, false);
+        View layoutView = inflater.inflate(R.layout.fragment_sponsor_list, container, false);
+        View view = layoutView.findViewById(R.id.sponsor_list);
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
+            Context context = layoutView.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
+            // Set the adapter
             recyclerView.setAdapter(sponsorAdapter);
         }
-        return view;
+        return layoutView;
     }
 
 }

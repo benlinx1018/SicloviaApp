@@ -1,10 +1,12 @@
 package com.siclovia.tang.siclovia;
 
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.CalendarContract;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import cz.msebera.android.httpclient.Header;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class ScheduleFragment extends Fragment {
@@ -54,12 +57,10 @@ public class ScheduleFragment extends Fragment {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String res) {
                         Gson gson = new GsonBuilder().create();
-
                         // Define Response class to correspond to the JSON response returned
-                        Events eventsObj =  gson.fromJson(res,Events.class);
+                        EventsObj eventsObj = gson.fromJson(res, EventsObj.class);
                         events.addAll(eventsObj.events);
                         eventAdapter.notifyDataSetChanged();
-
                     }
 
                     @Override
@@ -86,7 +87,7 @@ public class ScheduleFragment extends Fragment {
                 SwipeMenuItem directions = new SwipeMenuItem(
                         getActivity().getApplicationContext());
 
-                directions.setBackground(new ColorDrawable(Color.RED));
+                directions.setBackground(new ColorDrawable(Color.argb(255,191,16,45)));
                 directions.setWidth(dp2px(90));
                 directions.setTitle("Directions");
                 directions.setTitleSize(18);
@@ -96,7 +97,7 @@ public class ScheduleFragment extends Fragment {
 
                 SwipeMenuItem reminder = new SwipeMenuItem(
                         getActivity().getApplicationContext());
-                reminder.setBackground(new ColorDrawable(Color.YELLOW));
+                reminder.setBackground(new ColorDrawable(Color.argb(255,234,174,40)));
                 reminder.setWidth(dp2px(90));
                 reminder.setTitle("Reminder");
                 reminder.setTitleSize(18);
@@ -111,12 +112,12 @@ public class ScheduleFragment extends Fragment {
         listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Toast.makeText(getActivity().getBaseContext(),"p:"+position,Toast.LENGTH_SHORT).show();
+
                 switch (position)
                 {
                     //Direction
                     case 0:
-                        directionTo();
+                        directionTo(events.get(position).lat,events.get(position).lon);
                         break;
                     //Reminder
                     case 1:
@@ -128,18 +129,39 @@ public class ScheduleFragment extends Fragment {
         });
         return view;
     }
-    public void directionTo(){
-        //TODO: direction to googleMap
+    public void directionTo(String lat,String lon){
+
+        Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat+","+lon);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+        else
+        {
+            gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr="+lat+","+lon);
+            Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            startActivity(intent);
+        }
     }
-    public void reminder(){
+    public void addToCalender(){
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        intent.putExtra(CalendarContract.Events.TITLE, "test title");
+        //intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+        //        startDateMillis);
+        //intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+        //        endDateMillis);
+        intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, "test des");
         //TODO: redminder to schedule
     }
 
-    class Events {
+    class EventsObj {
 
         public List<Event> events;
 
-        public Events() {
+        public EventsObj() {
             events = new ArrayList<>();
         }
     }

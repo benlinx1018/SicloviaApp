@@ -167,6 +167,22 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
                 drawMenu.setBackgroundColor(Color.parseColor("#FCD214"));
                 break;
+            case 3:
+                fragment = SafetyFragment.newInstance("123","321");
+                drawMenu.setBackgroundResource(R.drawable.safety_bg);
+                break;
+            case 4:
+                fragment = DonateFragment.newInstance("123","321");
+                drawMenu.setBackgroundResource(R.drawable.donate_bg);
+                break;
+            case 5:
+                fragment = GalleryFragment.newInstance(3);
+                drawMenu.setBackgroundResource(R.drawable.donate_bg);
+                break;
+            case 6:
+                fragment = FeedFragment.newInstance("123","321");
+                drawMenu.setBackgroundResource(R.drawable.donate_bg);
+                break;
             default:
 
                 break;

@@ -10,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.siclovia.tang.siclovia.dummy.DummyContent;
-import com.siclovia.tang.siclovia.dummy.DummyContent.DummyItem;
+import java.util.ArrayList;
 
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -69,7 +67,7 @@ public class GalleryFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(new ArrayList<Photo>(), mListener));
         }
         return view;
     }
@@ -104,6 +102,6 @@ public class GalleryFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Photo item);
     }
 }

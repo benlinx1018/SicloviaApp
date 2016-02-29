@@ -7,21 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.siclovia.tang.siclovia.GalleryFragment.OnListFragmentInteractionListener;
-import com.siclovia.tang.siclovia.dummy.DummyContent.DummyItem;
+
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Photo> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyPhotoRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyPhotoRecyclerViewAdapter(List<Photo> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +32,8 @@ public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).subTitle);
+        holder.mContentView.setText(mValues.get(position).title);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +56,7 @@ public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecy
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Photo mItem;
 
         public ViewHolder(View view) {
             super(view);

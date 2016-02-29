@@ -80,45 +80,45 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private List<Map<String, Object>> getData() {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("img", R.drawable.menu_icon_sponsor);
         map.put("title", "SPONSORS");
 
         list.add(map);
 
-        map = new HashMap<String, Object>();
-        map.put("img", R.drawable.menu_icon_sponsor);
+        map = new HashMap<>();
+        map.put("img", R.drawable.menu_icon_schedule);
         map.put("title", "SCHEDULE");
 
         list.add(map);
 
-        map = new HashMap<String, Object>();
-        map.put("img", R.drawable.menu_icon_sponsor);
+        map = new HashMap<>();
+        map.put("img", R.drawable.menu_icon_route);
         map.put("title", "ROUTE");
 
         list.add(map);
 
-        map = new HashMap<String, Object>();
-        map.put("img", R.drawable.menu_icon_sponsor);
+        map = new HashMap<>();
+        map.put("img", R.drawable.menu_icon_safety);
         map.put("title", "SAFETY");
 
         list.add(map);
 
-        map = new HashMap<String, Object>();
-        map.put("img", R.drawable.menu_icon_sponsor);
+        map = new HashMap<>();
+        map.put("img", R.drawable.menu_icon_donate);
         map.put("title", "DONATE");
 
         list.add(map);
 
-        map = new HashMap<String, Object>();
-        map.put("img", R.drawable.menu_icon_sponsor);
+        map = new HashMap<>();
+        map.put("img", R.drawable.menu_icon_gallery);
         map.put("title", "GALLERY");
 
         list.add(map);
 
-        map = new HashMap<String, Object>();
-        map.put("img", R.drawable.menu_icon_sponsor);
+        map = new HashMap<>();
+        map.put("img", R.drawable.menu_icon_social);
         map.put("title", "SOCIAL");
 
         list.add(map);
@@ -177,11 +177,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 break;
             case 5:
                 fragment = GalleryFragment.newInstance(3);
-                drawMenu.setBackgroundResource(R.drawable.donate_bg);
+                drawMenu.setBackgroundResource(R.drawable.gallery_bg);
                 break;
             case 6:
-                fragment = FeedFragment.newInstance("123","321");
-                drawMenu.setBackgroundResource(R.drawable.donate_bg);
+                fragment = FeedFragment.newInstance();
+                drawMenu.setBackgroundResource(R.drawable.social_bg);
                 break;
             default:
 

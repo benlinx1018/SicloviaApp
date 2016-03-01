@@ -134,7 +134,7 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
         }
         else if(tabId.equals("fb"))
         {
-            url = "http://joinymca.org/siclovia/twfeed.php";
+            url = "http://joinymca.org/siclovia/fbfeed.php";
         }
         ((WebView)mTabHost.getCurrentView()).loadUrl(url);
     }

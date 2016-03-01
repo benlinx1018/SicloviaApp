@@ -136,6 +136,8 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
         {
             url = "http://joinymca.org/siclovia/fbfeed.php";
         }
+        ((WebView)mTabHost.getCurrentView()).getSettings().setUseWideViewPort(true);
+        ((WebView)mTabHost.getCurrentView()).getSettings().setLoadWithOverviewMode(true);
         ((WebView)mTabHost.getCurrentView()).loadUrl(url);
     }
 }

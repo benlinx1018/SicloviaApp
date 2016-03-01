@@ -1,12 +1,14 @@
 package com.siclovia.tang.siclovia;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.siclovia.tang.siclovia.GalleryFragment.OnListFragmentInteractionListener;
 
 
 import java.util.List;
@@ -14,60 +16,40 @@ import java.util.List;
 
 public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Photo> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<Photo> photoList;
 
-    public MyPhotoRecyclerViewAdapter(List<Photo> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public MyPhotoRecyclerViewAdapter(List<Photo> sponsers) {
+        photoList = sponsers;
+
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_photo_list, parent, false);
+                .inflate(R.layout.fragment_photo, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).subTitle);
-        holder.mContentView.setText(mValues.get(position).title);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
+        holder.imgLogo.setImageBitmap(photoList.get(position).Image);
+
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return photoList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public Photo mItem;
-
+        public final ImageView imgLogo;
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+
+
+            imgLogo = (ImageView) view.findViewById(R.id.gallery_ivPhoto);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
     }
 }

@@ -27,12 +27,6 @@ public class SponsorFragment extends Fragment {
     SponsorRecyclerViewAdapter sponsorAdapter;
     public final List<Sponsor> sponsors = new ArrayList<>();
 
-
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public SponsorFragment() {
     }
 

@@ -1,6 +1,7 @@
 package com.siclovia.tang.siclovia;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,98 +11,112 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class GalleryFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 3;
-    private OnListFragmentInteractionListener mListener;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    MyPhotoRecyclerViewAdapter photoAdapter;
+    public final List<Photo> photos = new ArrayList<>();
     public GalleryFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static GalleryFragment newInstance(int columnCount) {
+    public static GalleryFragment newInstance() {
         GalleryFragment fragment = new GalleryFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        photoAdapter =new MyPhotoRecyclerViewAdapter(photos);
+        //get all sponsors
+        new AsyncHttpClient().get("http://joinymca.org/siclovia/json/gallery.php", new TextHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String res) {
+                        Gson gson = new GsonBuilder().create();
+                        //Serialize Json Data
+                        Photos photosObj = gson.fromJson(res, Photos.class);
+                        //add to adapter list
+                        photos.addAll(photosObj.photos);
+                        //get each sponsor's web logo Image
+                        for (final Photo photo: photos) {
+                            AsyncHttpClient client = new AsyncHttpClient();
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+                            client.get(photo.uri, new FileAsyncHttpResponseHandler(getActivity().getBaseContext()) {
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, File response) {
+                                    photo.Image= BitmapFactory.decodeFile(response.getPath());
+                                    photoAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                    }
+                }
+        );
+
+    }
+    class Photos {
+        @SerializedName("photo")
+        public List<Photo> photos;
+
+        public Photos() {
+            photos = new ArrayList<>();
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_photo_list, container, false);
+        View layoutView = inflater.inflate(R.layout.fragment_photo_list, container, false);
+        View view = layoutView.findViewById(R.id.gallery_list);
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
+            Context context = layoutView.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyPhotoRecyclerViewAdapter(new ArrayList<Photo>(), mListener));
+            recyclerView.setLayoutManager(new GridLayoutManager(context,3));
+            // Set the adapter
+            recyclerView.setAdapter(photoAdapter);
         }
-        return view;
+        return layoutView;
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(Photo item);
-    }
+
+
 }

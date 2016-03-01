@@ -176,7 +176,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 drawMenu.setBackgroundResource(R.drawable.donate_bg);
                 break;
             case 5:
-                fragment = GalleryFragment.newInstance(3);
+                fragment = GalleryFragment.newInstance();
                 drawMenu.setBackgroundResource(R.drawable.gallery_bg);
                 break;
             case 6:

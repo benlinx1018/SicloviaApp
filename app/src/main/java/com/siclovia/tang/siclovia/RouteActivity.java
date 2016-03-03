@@ -35,6 +35,7 @@ import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -94,8 +95,20 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         }
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
 
     public class Markers {
         @SerializedName("markers")
@@ -119,8 +132,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         } catch (PackageManager.NameNotFoundException e) {
         } catch (NoSuchAlgorithmException e) {
         }
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
+        FacebookSdk.sdkInitialize(getBaseContext());
+        shareToFb("test","123");
         //建立new Fragment for google map
         mapFragment = SupportMapFragment.newInstance();
         //設定toolbar
@@ -514,13 +527,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
        //  uploadPhoto(imageBitmap);//先上傳到server
        if (imageBitmap!=null)
        {
-           Intent intent = new Intent();
-           intent.setAction(Intent.ACTION_SEND);
-           intent.putExtra(Intent.EXTRA_TEXT, "Test");
-           intent.putExtra(Intent.EXTRA_STREAM, ImageUri);
-
-           intent.setPackage("com.twitter.android");
-           startActivity(intent);
+          shareToFb("test","123");
        }
     }
 

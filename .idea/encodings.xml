@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/slt_as_ios7_cancel_bt.xml" charset="x-windows-950" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/slt_as_ios7_other_bt_bottom.xml" charset="x-windows-950" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/slt_as_ios7_other_bt_middle.xml" charset="x-windows-950" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/slt_as_ios7_other_bt_single.xml" charset="x-windows-950" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/slt_as_ios7_other_bt_top.xml" charset="x-windows-950" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/values-large/as_attrs.xml" charset="x-windows-950" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/values-large/as_theme.xml" charset="x-windows-950" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

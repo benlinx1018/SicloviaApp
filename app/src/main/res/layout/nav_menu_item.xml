@@ -2,33 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:gravity="center"
-    >
+    android:gravity="center">
 
     <ImageView
+        android:id="@+id/nav_menu_item_ivLogo"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:adjustViewBounds="true"
         android:layout_margin="10dp"
-        android:id="@+id/nav_menu_item_ivLogo" />
+        android:adjustViewBounds="true" />
 
     <TextView
+        android:id="@+id/nav_menu_item_tvName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="wrap_content"
         android:text="Large Text"
-        android:id="@+id/nav_menu_item_tvName" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
         <ImageView
+            android:id="@+id/nav_menu_item_ivSidebar"
             android:layout_width="5dp"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
-            android:id="@+id/nav_menu_item_ivSidebar"
-            android:background="@android:color/holo_red_dark"/>
+            android:background="@android:color/holo_red_dark" />
     </LinearLayout>
 
 </LinearLayout>

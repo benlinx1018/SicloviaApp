@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="65dp"
-	android:layout_height="42dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="65dp"
+    android:layout_height="42dp"
 
-	android:padding="3dp"
-	android:background="@drawable/tab_selector"
-	android:layout_marginRight="-6dp">
+    android:layout_marginRight="-6dp"
+    android:background="@drawable/tab_selector"
+    android:padding="3dp">
 
-	<ImageView
-		android:layout_marginLeft="5dp"
-		android:layout_marginTop="2dp"
-		android:layout_width="34dp"
-		android:layout_height="34dp"
-		android:adjustViewBounds="true"
-		android:id="@+id/tab_ig"
-		android:src="@drawable/tab_fb"/>
+    <ImageView
+        android:id="@+id/tab_ig"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/tab_fb" />
 </LinearLayout>
 

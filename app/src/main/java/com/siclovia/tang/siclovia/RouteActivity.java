@@ -2,8 +2,10 @@ package com.siclovia.tang.siclovia;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,7 +19,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
+
+import com.baoyz.actionsheet.ActionSheet;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -26,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import android.graphics.Color;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
@@ -39,10 +46,22 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
 
-public class RouteActivity extends AppCompatActivity implements OnMapReadyCallback, ListView.OnItemClickListener {
+public class RouteActivity extends AppCompatActivity implements OnMapReadyCallback, ListView.OnItemClickListener,ActionSheet.ActionSheetListener {
     public DrawerLayout drawMenu;
     private SupportMapFragment mapFragment;
     private ListView menuList;
+
+    @Override
+    public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
+        Toast.makeText(getApplicationContext(), "dismissed isCancle = " + isCancle, 0).show();
+    }
+
+    @Override
+    public void onOtherButtonClick(ActionSheet actionSheet, int index) {
+        Toast.makeText(getApplicationContext(), "click item index = " + index,
+                0).show();
+    }
+
     public class Markers {
         @SerializedName("markers")
         public List<Marker> markers;
@@ -240,9 +259,18 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 return true;
             }
             if (id == R.id.action_parking) {
+                ActionSheet.createBuilder(this, getSupportFragmentManager())
+
+                        .setCancelButtonTitle("Cancel Button")
+
+                        .setOtherButtonTitles("Take Photo", "Choose Photo")
+                        .setCancelableOnTouchOutside(true)
+                        .setListener(this).show();
                 return true;
             }
             if (id == R.id.action_option_icon) {
+                View menuItemView = findViewById(R.id.action_option_icon);
+                showShareMenu(menuItemView);
                 return true;
             }
             return super.onOptionsItemSelected(item);
@@ -283,9 +311,22 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-    public void setMapOverLay(GoogleMap googleMap){
+    public void setMapOverLay(GoogleMap googleMap) {
         googleMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                .position(new LatLng(29.43968,-98.4799), 2100));
+                .position(new LatLng(29.43968, -98.4799), 2100));
+    }
+    private void showShareMenu(View view) {
+        PopupWindow showPopup = PopupHelper
+                .newBasicPopupWindow(getApplicationContext());
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.custom_layout, null);
+
+        showPopup.setContentView(popupView);
+
+        showPopup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
+        showPopup.showAsDropDown(view);
     }
 }

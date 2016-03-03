@@ -4,40 +4,37 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    >
+    android:paddingRight="5dp">
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:orientation="horizontal">
 
         <ImageButton
-            android:padding="5dp"
-            android:background="@null"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:background="@null"
+            android:padding="5dp"
             android:src="@drawable/safety_title" />
 
         <ImageView
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:adjustViewBounds="true"
             android:src="@drawable/safety_arrow" />
     </LinearLayout>
 
     <ImageView
-        android:layout_marginTop="-25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-25dp"
         android:adjustViewBounds="true"
         android:src="@drawable/safety_content" />
-
 
 
 </LinearLayout>

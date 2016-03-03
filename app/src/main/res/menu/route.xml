@@ -6,15 +6,15 @@
         android:id="@+id/action_info"
         android:icon="@drawable/appbar_infoicon"
         android:title="InfoIcon"
-        app:showAsAction=""/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_parking"
         android:icon="@drawable/appbar_parkingicon"
         android:title="ParkingIcon"
-        app:showAsAction=""/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_option_icon"
         android:icon="@drawable/option_icon"
         android:title="@string/share"
-        app:showAsAction=""/>
+        app:showAsAction="always"/>
 </menu>

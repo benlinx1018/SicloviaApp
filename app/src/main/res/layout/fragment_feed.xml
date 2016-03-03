@@ -2,20 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
+    android:orientation="vertical">
 
 
     <ImageView
-        android:layout_gravity="center"
         android:id="@+id/iv_sponsor_logo"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:orientation="horizontal"
         android:layout_width="310dp"
         android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/social_title"
+        android:orientation="horizontal"
 
         />
 
@@ -27,66 +25,68 @@
         >
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TabWidget
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-                android:id="@android:id/tabs"
-                android:layout_width="130dp"
-                android:layout_height="42dp"
-                />
-            <ImageButton
-                android:id="@+id/tab_btn_tw"
-                android:src="@drawable/tab_tw_follow"
-                android:layout_weight="7"
-                android:scaleType="centerInside"
-                android:background="@null"
-                android:layout_width="0dp"
-                android:layout_height="42dp"
-                android:layout_marginRight="5dp"
-                />
-            <ImageButton
-                android:id="@+id/tab_btn_fb"
-                android:src="@drawable/tab_fb_like"
-                android:layout_weight="6"
-                android:scaleType="centerInside"
-                android:background="@null"
-                android:layout_width="0dp"
-                android:layout_height="42dp"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TabWidget
+
+                    android:id="@android:id/tabs"
+                    android:layout_width="130dp"
+                    android:layout_height="42dp" />
+
+                <ImageButton
+                    android:id="@+id/tab_btn_tw"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="7"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/tab_tw_follow" />
+
+                <ImageButton
+                    android:id="@+id/tab_btn_fb"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_weight="6"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/tab_fb_like" />
 
 
+            </LinearLayout>
 
-
-        </LinearLayout>
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
+
                 <ImageView
-                    android:layout_gravity="center"
                     android:id="@+id/test"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal"
                     android:layout_width="310dp"
                     android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp"
                     android:background="@drawable/social_title"
-                    />
+                    android:orientation="horizontal" />
+
                 <WebView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:id="@+id/webView1"
-                    android:layout_gravity="center_horizontal" />
-                <WebView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal" />
+
+                <WebView
                     android:id="@+id/webView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal" />
 
             </FrameLayout>

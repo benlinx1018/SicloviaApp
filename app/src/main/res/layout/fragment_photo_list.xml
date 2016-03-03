@@ -2,64 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
-
+    android:orientation="vertical">
     <ImageView
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:adjustViewBounds="true"
         android:src="@drawable/gallery_title" />
-
     <ImageView
-        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:adjustViewBounds="true"
         android:src="@drawable/gallery_subtitle" />
+
     <LinearLayout
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
+            android:id="@+id/fb"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/fb"
-            android:id="@+id/fb" />
-        <ImageView
             android:layout_weight="1"
-        android:adjustViewBounds="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/fb" />
+
+        <ImageView
+            android:id="@+id/tw"
             android:layout_width="0dp"
-        android:layout_height="wrap_content"
-            android:src="@drawable/tw"
-        android:id="@+id/tw" />
-        <ImageView
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-        android:adjustViewBounds="true"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-            android:src="@drawable/ig"
-        android:id="@+id/ig" />
+            android:adjustViewBounds="true"
+            android:src="@drawable/tw" />
+
+        <ImageView
+            android:id="@+id/ig"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ig" />
 
     </LinearLayout>
+
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/gallery_list"
         android:name="com.siclovia.tang.siclovia.GalleryFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         tools:context="com.siclovia.tang.siclovia.GalleryFragment"
         tools:listitem="@layout/fragment_photo" />
 

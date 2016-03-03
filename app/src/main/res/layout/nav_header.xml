@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:paddingTop="5px"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
     android:paddingLeft="60dp"
     android:paddingRight="60dp"
-    android:paddingBottom="10dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:orientation="vertical"
-    android:gravity="bottom">
+    android:paddingTop="5px"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
     <ImageView
@@ -17,11 +18,12 @@
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="true"
         android:src="@drawable/menu_title" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:layout_gravity="center_horizontal"
         android:text="Sunday, April 3rd"
         android:textColor="#565656"
-        android:layout_gravity="center_horizontal" />
+        android:textSize="18sp" />
 </LinearLayout>

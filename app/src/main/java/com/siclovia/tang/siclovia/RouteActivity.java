@@ -3,9 +3,11 @@ package com.siclovia.tang.siclovia;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,34 +33,37 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
+
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import android.graphics.Color;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import com.google.maps.android.clustering.Cluster;
-import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -81,11 +87,27 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         if (index ==0)
         {
             callCameraIntent();
+
         }
         else if(index ==1)
         {
             callGalleryIntent();
         }
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
     }
 
     public class Markers {
@@ -94,57 +116,14 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         public Markers() { markers = new ArrayList<>(); }
     }
-
-    class OwnIconRendered extends DefaultClusterRenderer<AppClusterItem> {
-        public OwnIconRendered(Context context, GoogleMap map,
-                               ClusterManager<AppClusterItem> clusterManager) {
-            super(context, map, clusterManager);
-        }
-
-        @Override
-        protected void onBeforeClusterItemRendered(AppClusterItem item, MarkerOptions markerOptions) {
-            // Draw a single person.
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(item.getIcon()));
-            markerOptions.snippet(item.getSnippet());
-            markerOptions.title(item.getTitle());
-            super.onBeforeClusterItemRendered(item, markerOptions);
-        }
-
-        @Override
-        protected void onBeforeClusterRendered(Cluster<AppClusterItem> cluster, MarkerOptions markerOptions) {
-            // Draw multiple people.
-            for (AppClusterItem item : cluster.getItems()) {
-                markerOptions.snippet(item.getSnippet());
-                markerOptions.title(item.getTitle());
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_reclovia));
-                break;
-            }
-        }
-
-        @Override
-        protected boolean shouldRenderAsCluster(Cluster cluster) {
-            // Always render clusters.
-            return cluster.getSize() > 1;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.siclovia.tang.siclovia",         PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String sign= Base64.encodeToString(md.digest(), Base64.DEFAULT);
-                Log.e("MY KEY HASH:", sign);
-                Toast.makeText(getApplicationContext(),sign,         Toast.LENGTH_LONG).show();
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-        } catch (NoSuchAlgorithmException e) {
-        }
+        //初始化FB SDK
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+
 
         //建立new Fragment for google map
         mapFragment = SupportMapFragment.newInstance();
@@ -250,6 +229,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Handle navigation view item clicks here.
+
+
         Fragment fragment = null;
         android.support.v4.app.FragmentManager sfm = getSupportFragmentManager();
         if (mapFragment.isAdded()) {
@@ -350,24 +331,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         //Set{29.438882, -98.478024}
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.438882, -98.478024), 13));
         setMapOverLay(googleMap);
-
+        //MARKER
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://joinymca.org/siclovia/json/markers.php", new TextHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String res) {
-                        //MARKER
-                        ClusterManager<AppClusterItem> mClusterManager;
-                        mClusterManager = new ClusterManager<AppClusterItem>(RouteActivity.this, googleMap);
-                        mClusterManager.setRenderer(new OwnIconRendered(RouteActivity.this, googleMap, mClusterManager));
-                        googleMap.setOnCameraChangeListener(mClusterManager);
-                        googleMap.setOnMarkerClickListener(mClusterManager);
-                        googleMap.setOnInfoWindowClickListener(mClusterManager);
-                        /*
-                        mClusterManager.setOnClusterClickListener(this);
-                        mClusterManager.setOnClusterInfoWindowClickListener(this);
-                        mClusterManager.setOnClusterItemClickListener(this);
-                        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
-                        */
                         Gson gson = new GsonBuilder().create();
 
                         // Define Response class to correspond to the JSON response returned
@@ -377,57 +345,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             String[] latlong = obj.location.substring(1, obj.location.length() - 1).split(",");
                             double latitude = Double.parseDouble(latlong[0]);
                             double longitude = Double.parseDouble(latlong[1]);
-
-                            /*
-                            //1 Open Intersection           Green point
-                            //3 Start & Finish Line         STOP Icon
-                            //4 Water, Restroom, First Aid  R -> 3Icon
-                            //8 Parking                     P point
-                            //9 Closed Intersection         Red point
-                            */
-                            switch (obj.type) {
-                                case 1:
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_greenpoint))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
-                                            .position(new LatLng(latitude, longitude)));
-                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_greenpoint, obj.name, obj.subTitle));
-                                    break;
-                                case 3:
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_stoppoint))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
-                                            .position(new LatLng(latitude, longitude)));
-                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
-                                    break;
-                                case 4:
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude+0.000001, R.drawable.map_icon_water, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude-0.000001, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
-                                    break;
-                                case 8:
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_parking))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
-                                            .position(new LatLng(latitude, longitude)));
-                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_parking, obj.name, obj.subTitle));
-                                    break;
-                                case 9:
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_redpoint))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
-                                            .position(new LatLng(latitude, longitude)));
-                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_redpoint, obj.name, obj.subTitle));
-                                    break;
-                                default:
-                                    break;
-                            }
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(latitude, longitude))
+                                    .title(obj.name));
                         }
-                        mClusterManager.cluster();
                     }
 
                     @Override
@@ -436,9 +357,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     }
                 }
         );
+
+
     }
 
-    public void setMapOverLay(GoogleMap googleMap){
+    public void setMapOverLay(GoogleMap googleMap) {
         googleMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
                 .position(new LatLng(29.43968, -98.4799), 2100));
@@ -593,16 +516,34 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             imageBitmap =BitmapFactory.decodeFile(picturePath);
         }
        //  uploadPhoto(imageBitmap);//先上傳到server
-       if (imageBitmap!=null)
-       {
-           Intent intent = new Intent();
-           intent.setAction(Intent.ACTION_SEND);
-           intent.putExtra(Intent.EXTRA_TEXT, "Test");
-           intent.putExtra(Intent.EXTRA_STREAM, ImageUri);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.putExtra(Intent.EXTRA_TEXT, "TEXT");
+        share.putExtra(Intent.EXTRA_SUBJECT, "Post Image");
+        // Set the MIME type
+        share.setType("image/*");
+        share.setPackage("com.twitter.android");
 
-           intent.setPackage("com.twitter.android");
-           startActivity(intent);
-       }
+
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, ImageUri);
+        PackageManager packManager = getPackageManager();
+        List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(share, PackageManager.MATCH_DEFAULT_ONLY);
+
+        boolean resolved = false;
+        for(ResolveInfo resolveInfo: resolvedInfoList){
+            if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
+                share.setClassName(
+                        resolveInfo.activityInfo.packageName,
+                        resolveInfo.activityInfo.name );
+                resolved = true;
+                break;
+            }
+        }
+        if(resolved){
+            startActivity(share);
+        }else{
+            Toast.makeText(RouteActivity.this, "twitter App is not installed", Toast.LENGTH_LONG).show();
+        }
     }
 
 }

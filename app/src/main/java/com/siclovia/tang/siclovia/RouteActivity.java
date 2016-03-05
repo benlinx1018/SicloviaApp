@@ -62,7 +62,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.graphics.Color;
 import android.widget.Toast;
 
@@ -82,7 +81,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
-
 import cz.msebera.android.httpclient.Header;
 
 public class RouteActivity extends AppCompatActivity implements OnMapReadyCallback, ListView.OnItemClickListener, ActionSheet.ActionSheetListener {
@@ -110,7 +108,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         }
 
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -118,7 +115,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
     }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -387,7 +383,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         //Set{29.438882, -98.478024}
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.438882, -98.478024), 13));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.438882, -98.478024), 14));
         setMapOverLay(googleMap);
         //MARKER
         AsyncHttpClient client = new AsyncHttpClient();
@@ -395,18 +391,14 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String res) {
                         //MARKER
-                        ClusterManager<AppClusterItem> mClusterManager;
-                        mClusterManager = new ClusterManager<AppClusterItem>(RouteActivity.this, googleMap);
+                        ClusterManager<AppClusterItem> mClusterManager = new ClusterManager<AppClusterItem>(RouteActivity.this, googleMap);
                         mClusterManager.setRenderer(new OwnIconRendered(RouteActivity.this, googleMap, mClusterManager));
+                        //Distinct
+                        mClusterManager.setAlgorithm(new DistinctAlgorithm());
                         googleMap.setOnCameraChangeListener(mClusterManager);
                         googleMap.setOnMarkerClickListener(mClusterManager);
                         googleMap.setOnInfoWindowClickListener(mClusterManager);
-                        /*
-                        mClusterManager.setOnClusterClickListener(this);
-                        mClusterManager.setOnClusterInfoWindowClickListener(this);
-                        mClusterManager.setOnClusterItemClickListener(this);
-                        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
-                        */
+
                         Gson gson = new GsonBuilder().create();
 
                         // Define Response class to correspond to the JSON response returned
@@ -442,9 +434,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.000001, R.drawable.map_icon_water, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude+0.0004, R.drawable.map_icon_water, obj.name, obj.subTitle));
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.000001, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude-0.0004, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
                                     break;
                                 case 8:
                                     googleMap.addMarker(new MarkerOptions()
@@ -499,7 +491,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         startActivityForResult(i, GET_FROM_FILE);
     }
-
     private void showShareMenu(View view) {
         PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
@@ -600,7 +591,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             Toast.makeText(RouteActivity.this, "instagram App is not installed", Toast.LENGTH_LONG).show();
         }
     }
-
     //照片上傳 By 圖像資料
     private void uploadPhoto(String imgPath, final Uri imgUri, Bitmap img_bit) {
 
@@ -633,7 +623,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             e.printStackTrace();
         }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
 
+            }
+        });
     }
 
     @Override
@@ -665,7 +659,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     isOK = false;
                     //Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
                 }
+                else{
+                   Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
 
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

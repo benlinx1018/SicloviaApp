@@ -361,21 +361,18 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
-            //dispatchTakePictureIntent();
-            // callCameraIntent();
-            // shareToFb("Test","http://joinymca.org//siclovia//json//share//1443380640_.jpg");
-
+            View menuItemView = findViewById(R.id.action_info);
+            showInfoMenu(menuItemView);
         }
         if (id == R.id.action_parking) {
-
+            View menuItemView = findViewById(R.id.action_parking);
+            showParkingMenu(menuItemView);
         }
         if (id == R.id.action_option_icon) {
             View menuItemView = findViewById(R.id.action_option_icon);
             showShareMenu(menuItemView);
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -434,9 +431,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude+0.0004, R.drawable.map_icon_water, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude+0.0003, R.drawable.map_icon_water, obj.name, obj.subTitle));
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude-0.0004, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude-0.0003, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
                                     break;
                                 case 8:
                                     googleMap.addMarker(new MarkerOptions()
@@ -491,6 +488,31 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         startActivityForResult(i, GET_FROM_FILE);
     }
+
+    private void showInfoMenu(View view) {
+        PopupWindow showPopup = PopupHelper
+                .newBasicPopupWindow(getApplicationContext());
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.map_info, null);
+        showPopup.setContentView(popupView);
+        showPopup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
+        showPopup.showAsDropDown(view);
+    }
+
+    private void showParkingMenu(View view) {
+        PopupWindow showPopup = PopupHelper
+                .newBasicPopupWindow(getApplicationContext());
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.map_bar_parking, null);
+        showPopup.setContentView(popupView);
+        showPopup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
+        showPopup.showAsDropDown(view);
+    }
+
     private void showShareMenu(View view) {
         PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
@@ -502,14 +524,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             public void onClick(View v) {
                 share_selected = v.getId();
                 ActionSheet.createBuilder(v.getContext(), getSupportFragmentManager())
-
                         .setCancelButtonTitle("Cancel Button")
-
                         .setOtherButtonTitles("Take Photo", "Choose Photo")
                         .setCancelableOnTouchOutside(true)
-
                         .setListener(RouteActivity.this).setListener(RouteActivity.this).show();
-
             }
         };
         popupView.findViewById(R.id.option_share_fb).setOnClickListener(shareEvent);

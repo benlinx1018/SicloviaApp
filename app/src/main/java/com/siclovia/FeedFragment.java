@@ -1,8 +1,5 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
-import android.app.ActionBar;
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.net.Uri;
@@ -12,13 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
-import android.widget.TabWidget;
-import android.widget.TextView;
+
+
+
 public class FeedFragment extends Fragment implements TabHost.OnTabChangeListener {
 
 

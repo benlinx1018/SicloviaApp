@@ -1,4 +1,4 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import java.util.ArrayList;
 import java.util.Collection;

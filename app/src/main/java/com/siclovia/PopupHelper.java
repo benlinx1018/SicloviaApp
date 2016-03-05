@@ -1,4 +1,4 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -9,6 +9,8 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
+
+
 
 public class PopupHelper {
 

@@ -1,4 +1,4 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".RouteActivity">
+    tools:context="com.siclovia.RouteActivity">
     <item
         android:id="@+id/action_info"
         android:icon="@drawable/appbar_infoicon"
@@ -15,6 +15,6 @@
     <item
         android:id="@+id/action_option_icon"
         android:icon="@drawable/option_icon"
-        android:title="@string/share"
+        android:title="Share"
         app:showAsAction="always"/>
 </menu>

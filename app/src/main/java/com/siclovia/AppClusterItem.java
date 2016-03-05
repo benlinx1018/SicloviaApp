@@ -1,4 +1,4 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.siclovia.tang.siclovia.notification;
+package com.notification;
 
 import android.content.Intent;
 

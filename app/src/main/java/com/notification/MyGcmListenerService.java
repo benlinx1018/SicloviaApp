@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.siclovia.tang.siclovia.notification;
+package com.notification;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -28,8 +28,8 @@ import android.util.Log;
 
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.siclovia.tang.siclovia.R;
-import com.siclovia.tang.siclovia.RouteActivity;
+import com.siclovia.R;
+import com.siclovia.RouteActivity;
 
 public class MyGcmListenerService extends GcmListenerService {
 

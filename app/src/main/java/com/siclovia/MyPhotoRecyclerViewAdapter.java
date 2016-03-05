@@ -1,23 +1,17 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 
@@ -46,6 +40,24 @@ public class MyPhotoRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotoRecy
                     .resize(200, 0)
                     .config(Bitmap.Config.RGB_565)
                     .into(holder.imgLogo);
+
+            holder.imgLogo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), PhotoActivity.class);
+                    intent.putExtra("position", position);
+                    int[] location = new int[2];
+                    v.getLocationOnScreen(location);
+                    intent.putExtra("locationX", location[0]);//必须
+                    intent.putExtra("locationY", location[1]);//必须
+                    intent.putExtra("uri", photoList.get(position).uri);
+                    intent.putExtra("name", photoList.get(position).fileName);
+                    intent.putExtra("width", v.getWidth());//必须
+                    intent.putExtra("height", v.getHeight());//必须
+                    v.getContext().startActivity(intent);
+                    ((RouteActivity)v.getContext()).overridePendingTransition(0, 0);
+                }
+            });
         }
     }
 

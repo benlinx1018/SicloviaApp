@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.siclovia.tang.siclovia">
+    package="com.siclovia">
 
     <activity
         android:name="com.facebook.FacebookActivity"
@@ -8,9 +8,8 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-
     <permission
-        android:name="com.siclovia.tang.siclovia.permission.C2D_MESSAGE"
+        android:name="com.siclovia.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -18,12 +17,13 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.siclovia.tang.siclovia.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.siclovia.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,10 +31,13 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- TODO:FB Api key   FacebookContentProvider{APIKey} -->
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider1512809195692385"
             android:exported="true" />
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -48,22 +51,22 @@
         </receiver>
 
         <service
-            android:name="com.siclovia.tang.siclovia.notification.MyGcmListenerService"
+            android:name="com.notification.MyGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
         <service
-            android:name="com.siclovia.tang.siclovia.notification.MyInstanceIDListenerService"
+            android:name="com.notification.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
         <service
-            android:name="com.siclovia.tang.siclovia.notification.RegistrationIntentService"
-            android:exported="false"></service>
+            android:name="com.notification.RegistrationIntentService"
+            android:exported="false" />
 
         <activity
             android:name=".RouteActivity"
@@ -76,14 +79,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <!-- TODO:FB Api key -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="1512809195692385" />
+        <!-- TODO:Google Map Api Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCiATd19CTcnjfdnJ8WJ2lDozJjq_wH8mc" />
 
+        <activity android:name=".PhotoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,6 @@
 
 
-package com.siclovia.tang.siclovia.notification;
+package com.notification;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -12,7 +12,8 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.siclovia.tang.siclovia.R;
+import com.siclovia.R;
+
 
 import java.io.IOException;
 

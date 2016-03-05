@@ -25,7 +25,7 @@
         android:name="com.siclovia.tang.siclovia.SponsorFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.siclovia.tang.siclovia.SponsorFragment"
+        tools:context="com.siclovia.SponsorFragment"
         tools:listitem="@layout/fragment_sponsor" />
 
 </LinearLayout>

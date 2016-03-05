@@ -1,4 +1,4 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
+
 
 
 import java.io.File;

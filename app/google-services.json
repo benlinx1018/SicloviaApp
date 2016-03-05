@@ -1,24 +1,28 @@
 {
   "project_info": {
-    "project_id": "siclovia-1214",
-    "project_number": "813672895271",
-    "name": "siclovia"
+    "project_id": "api-8623084231916732458-750042",
+    "project_number": "149555703475",
+    "name": "Siclovia App"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:813672895271:android:6a788c9302db72cc",
-        "client_id": "android:com.siclovia.tang.siclovia",
+        "mobilesdk_app_id": "1:149555703475:android:5ac2af4bd6e40fd2",
+        "client_id": "android:com.siclovia",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.siclovia.tang.siclovia"
+          "package_name": "com.siclovia",
+          "certificate_hash": []
         }
       },
       "oauth_client": [],
       "api_key": [],
       "services": {
         "analytics_service": {
-          "status": 1
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-50541010-4"
+          }
         },
         "cloud_messaging_service": {
           "status": 2,

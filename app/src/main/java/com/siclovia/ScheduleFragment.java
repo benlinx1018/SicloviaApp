@@ -1,4 +1,4 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -22,12 +21,13 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.*;
+
+
 import cz.msebera.android.httpclient.Header;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class ScheduleFragment extends Fragment {

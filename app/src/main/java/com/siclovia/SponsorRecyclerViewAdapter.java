@@ -1,8 +1,7 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 
 
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.Utilities;
+
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class SponsorRecyclerViewAdapter extends RecyclerView.Adapter<SponsorRecy
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utilities.openActionView(v.getContext(),Uri.parse(sponserList.get(position).webLink));
+                Utilities.openActionView(v.getContext(), Uri.parse(sponserList.get(position).webLink));
             }
         });
     }

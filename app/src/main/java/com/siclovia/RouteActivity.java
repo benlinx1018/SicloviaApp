@@ -1,17 +1,12 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.pm.Signature;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,11 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -49,14 +42,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +57,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -79,9 +67,10 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+
+
 import cz.msebera.android.httpclient.Header;
 
 public class RouteActivity extends AppCompatActivity implements OnMapReadyCallback, ListView.OnItemClickListener, ActionSheet.ActionSheetListener {
@@ -113,15 +102,13 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     protected void onResume() {
         super.onResume();
 
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
+
     }
     @Override
     protected void onPause() {
         super.onPause();
 
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
+
     }
 
     public class Markers {
@@ -221,7 +208,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         toggle.syncState();
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
-        mTracker = analytics.newTracker("UA-74679680-1");
+        mTracker = analytics.newTracker("UA-50541010-4");
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory("siclovia")
                 .setAction("Start")
@@ -320,11 +307,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 drawMenu.setBackgroundColor(Color.parseColor("#FCD214"));
                 break;
             case 3:
-                fragment = SafetyFragment.newInstance("123", "321");
+                fragment = SafetyFragment.newInstance();
                 drawMenu.setBackgroundResource(R.drawable.safety_bg);
                 break;
             case 4:
-                fragment = DonateFragment.newInstance("123", "321");
+                fragment = DonateFragment.newInstance();
                 drawMenu.setBackgroundResource(R.drawable.donate_bg);
                 break;
             case 5:
@@ -440,9 +427,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude+0.0003, R.drawable.map_icon_water, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.0003, R.drawable.map_icon_water, obj.name, obj.subTitle));
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude-0.0003, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.0003, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
                                     break;
                                 case 8:
                                     googleMap.addMarker(new MarkerOptions()

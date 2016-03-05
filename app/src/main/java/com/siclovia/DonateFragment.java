@@ -1,4 +1,4 @@
-package com.siclovia.tang.siclovia;
+package com.siclovia;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -14,10 +14,13 @@ import android.widget.ImageView;
 import com.Utilities;
 
 
-public class SafetyFragment extends Fragment {
 
-    public static SafetyFragment newInstance(String param1, String param2) {
-        SafetyFragment fragment = new SafetyFragment();
+public class DonateFragment extends Fragment {
+
+
+
+    public static DonateFragment newInstance() {
+        DonateFragment fragment = new DonateFragment();
 
         return fragment;
     }
@@ -31,7 +34,9 @@ public class SafetyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_safety, container, false);
+
+
+        View rootView = inflater.inflate(R.layout.fragment_donate, container, false);
         View.OnTouchListener onPressEffect = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -56,16 +61,15 @@ public class SafetyFragment extends Fragment {
         View.OnClickListener  onClick  = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utilities.openActionView(v.getContext(),Uri.parse("http://www.ymcasatx.org/ymca-of-greater-san-antonio/siclovia-pledge"));
+                Utilities.openActionView(v.getContext(), Uri.parse("https://www.ymcasatx.org/sslpage.aspx?pid=2781"));
             }
         };
-        rootView.findViewById(R.id.safety_igBtnTitle).setOnTouchListener(onPressEffect);
-        rootView.findViewById(R.id.safety_igBtnContent).setOnTouchListener(onPressEffect);
-        rootView.findViewById(R.id.safety_igBtnArrow).setOnTouchListener(onPressEffect);
-        rootView.findViewById(R.id.safety_igBtnTitle).setOnClickListener(onClick);
-        rootView.findViewById(R.id.safety_igBtnContent).setOnClickListener(onClick);
-        rootView.findViewById(R.id.safety_igBtnArrow).setOnClickListener(onClick);
-        return rootView;
+        rootView.findViewById(R.id.donate_igBtnTitle).setOnClickListener(onClick);
+        rootView.findViewById(R.id.donate_igBtnTitle).setOnClickListener(onClick);
+
+        rootView.findViewById(R.id.donate_igBtnTitle).setOnTouchListener(onPressEffect);
+        rootView.findViewById(R.id.donate_igBtnTitle).setOnTouchListener(onPressEffect);
+        return  rootView;
     }
 
 

@@ -15,9 +15,13 @@
         <item name="windowNoTitle">true</item>
         <item name="actionSheetStyle">@style/ActionSheetStyleiOS7</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="Animations" />
+
     <style name="Animations.GrowFromTop">
         <item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
         <item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
@@ -36,5 +40,13 @@
         <item name="otherButtonSpacing">0dp</item>
         <item name="cancelButtonMarginTop">10dp</item>
         <item name="actionSheetTextSize">12sp</item>
+    </style>
+
+    <style name="AppTheme.Transparent">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

@@ -169,6 +169,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         //取得google maps
         mapFragment.getMapAsync(this);
+        getSupportFragmentManager().beginTransaction().add(R.id.map_frame, mapFragment).commit();
     }
 
     private List<Map<String, Object>> getData() {

@@ -612,7 +612,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 RequestParams params = new RequestParams();
                 params.put("userfile", file);
 
-                client.post("http://joinymca.org/siclovia/json/photo.php", new TextHttpResponseHandler() {
+                client.post("http://joinymca.org/siclovia/json/photo.php",params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 

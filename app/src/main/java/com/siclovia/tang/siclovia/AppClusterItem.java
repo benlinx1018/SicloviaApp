@@ -3,12 +3,6 @@ package com.siclovia.tang.siclovia;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
-/**
- * Created by Dimitar Danailov on 6/3/15.
- * email: dimityr.danailov@gmail.com
- *
- * Documentation: https://developers.google.com/maps/documentation/android/utility/marker-clustering
- */
 public class AppClusterItem implements ClusterItem {
 
     private final LatLng mPosition;

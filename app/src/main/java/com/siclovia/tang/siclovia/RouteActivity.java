@@ -603,15 +603,13 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
     //照片上傳 By 圖像資料
     private void uploadPhoto(String imgPath, final Uri imgUri, Bitmap img_bit) {
-        AsyncHttpClient client = new AsyncHttpClient();
 
-        RequestParams params = new RequestParams();
         try {
             File file = new File(imgPath);
 
             if (file.exists()) {
-
-
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams params = new RequestParams();
                 params.put("userfile", file);
 
                 client.post("http://joinymca.org/siclovia/json/photo.php", new TextHttpResponseHandler() {

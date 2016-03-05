@@ -38,8 +38,8 @@ public class ActionSheet extends Fragment implements View.OnClickListener {
     private static final String ARG_CANCEL_BUTTON_TITLE = "cancel_button_title";
     private static final String ARG_OTHER_BUTTON_TITLES = "other_button_titles";
     private static final String ARG_CANCELABLE_ONTOUCHOUTSIDE = "cancelable_ontouchoutside";
-    private static final int CANCEL_BUTTON_ID = View.generateViewId();
-    private static final int BG_VIEW_ID =  View.generateViewId();
+    private static final int CANCEL_BUTTON_ID =100;
+    private static final int BG_VIEW_ID =  10;
     private static final int TRANSLATE_DURATION = 200;
     private static final int ALPHA_DURATION = 300;
 

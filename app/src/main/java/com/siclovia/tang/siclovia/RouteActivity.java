@@ -3,6 +3,7 @@ package com.siclovia.tang.siclovia;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -14,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -37,6 +39,7 @@ import android.widget.SimpleAdapter;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -45,6 +48,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -77,6 +81,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     static final int GET_FROM_CAMERA = 1;
     static final int GET_FROM_FILE = 2;
     private int share_selected=0;
+    ShareDialog fbShareDialog;
     @Override
     public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
 
@@ -122,7 +127,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_route);
         //初始化FB SDK
         FacebookSdk.sdkInitialize(getApplicationContext());
-
+        fbShareDialog = new ShareDialog(this);
 
 
         //建立new Fragment for google map
@@ -310,8 +315,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             //noinspection SimplifiableIfStatement
             if (id == R.id.action_info) {
                 //dispatchTakePictureIntent();
-                //callCameraIntent();
-                shareToFb("Test","http://joinymca.org//siclovia//json//share//1443380640_.jpg");
+               // callCameraIntent();
+               // shareToFb("Test","http://joinymca.org//siclovia//json//share//1443380640_.jpg");
                 return true;
             }
             if (id == R.id.action_parking) {
@@ -395,7 +400,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
                         .setOtherButtonTitles("Take Photo", "Choose Photo")
                         .setCancelableOnTouchOutside(true)
-                        .setListener(RouteActivity.this).show();
+
+                        .setListener(RouteActivity.this).setListener(RouteActivity.this).show();
+
             }
         };
         popupView.findViewById(R.id.option_share_fb).setOnClickListener(shareEvent);
@@ -408,48 +415,71 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
-    private void shareToFb(String msg,String urlToShare){
-/*
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TITLE, msg); // NB: has no effect!
-        intent.putExtra(Intent.EXTRA_SUBJECT, msg); // NB: has no effect!
-        intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
+    private void shareToFb(Uri link){
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle("Join me at Siclovia")
+                    .setContentDescription(
+                            "I am at the Siclovia on Broadway.  Come join us!")
+                    .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                    .build();
 
-// See if official Facebook app is found
-        boolean facebookAppFound = false;
-        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
-                intent.setPackage(info.activityInfo.packageName);
-                facebookAppFound = true;
+            fbShareDialog.show(linkContent);
+        }
+    }
+    private void shareToTw(Uri filepath){
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.putExtra(Intent.EXTRA_TEXT, "Join me at Siclovia on Broadway. #Siclovia");
+        // Set the MIME type
+        share.setType("image/*");
+        share.setPackage("com.twitter.android");
+
+
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, filepath);
+        PackageManager packManager = getPackageManager();
+        List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(share, PackageManager.MATCH_DEFAULT_ONLY);
+
+        boolean resolved = false;
+        for(ResolveInfo resolveInfo: resolvedInfoList){
+            if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
+                share.setClassName(
+                        resolveInfo.activityInfo.packageName,
+                        resolveInfo.activityInfo.name);
+                resolved = true;
                 break;
             }
         }
-
-// As fallback, launch sharer.php in a browser
-        if (!facebookAppFound) {
-            String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + urlToShare;
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+        if(resolved){
+            startActivity(share);
+        }else{
+            Toast.makeText(RouteActivity.this, "twitter App is not installed", Toast.LENGTH_LONG).show();
         }
-
-        startActivity(intent);
-*/
-        ShareLinkContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse("https://developers.facebook.com"))
-                .build();
-
     }
-    private void shareToTw(String msg,String fileUri){
-        Toast.makeText(this,"Twitter is not installed on this device",Toast.LENGTH_LONG).show();
-      //  String url = "http://www.twitter.com/intent/tweet?url="+urlToShare+"&text="+msg;
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
-       // intent.setData(Uri.parse(url));
-        startActivityForResult(intent,-1);
-    }
-    private void shareToIg(String msg,String urlToShare){
+    private void shareToIg(Uri filepath){
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.putExtra(Intent.EXTRA_TEXT, "share");
+        share.setType("image/*");
+        share.setPackage("com.instagram.android");
+        share.putExtra(Intent.EXTRA_STREAM, filepath);
+        PackageManager packManager = getPackageManager();
+        List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(share, PackageManager.MATCH_DEFAULT_ONLY);
 
+        boolean resolved = false;
+        for(ResolveInfo resolveInfo: resolvedInfoList){
+            if(resolveInfo.activityInfo.packageName.startsWith("com.instagram.android")){
+                share.setClassName(
+                        resolveInfo.activityInfo.packageName,
+                        resolveInfo.activityInfo.name );
+                resolved = true;
+                break;
+            }
+        }
+        if(resolved){
+            startActivity(share);
+        }else{
+            Toast.makeText(RouteActivity.this, "instagram App is not installed", Toast.LENGTH_LONG).show();
+        }
     }
     //照片上傳 By 圖像資料
     private void uploadPhoto(Bitmap img_bit){
@@ -503,9 +533,38 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         if (requestCode == GET_FROM_CAMERA && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
            imageBitmap = (Bitmap) extras.get("data");
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File file=new File(Environment.getExternalStorageDirectory()+"/images");
+            if(!file.isDirectory()){
+                file.mkdir();
+            }
+            File mypath=new File(file,"img_"+ System.currentTimeMillis()+".jpg");
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(mypath);
+                // Use the compress method on the BitMap object to write image to the OutputStream
 
+
+                if( imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos))
+                {
+                   Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                   Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
+
+                }
+
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+
+            }
+            ImageUri =Uri.fromFile(mypath);
+            shareToTw(ImageUri);
         }
-        else if(requestCode == GET_FROM_FILE){
+        else if(requestCode == GET_FROM_FILE  && null != data){
             ImageUri = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
             Cursor cursor = getContentResolver().query(ImageUri, filePathColumn, null, null, null);
@@ -515,35 +574,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             cursor.close();
             imageBitmap =BitmapFactory.decodeFile(picturePath);
         }
-       //  uploadPhoto(imageBitmap);//先上傳到server
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.putExtra(Intent.EXTRA_TEXT, "TEXT");
-        share.putExtra(Intent.EXTRA_SUBJECT, "Post Image");
-        // Set the MIME type
-        share.setType("image/*");
-        share.setPackage("com.twitter.android");
+        //uploadPhoto(imageBitmap);//先上傳到server
 
-
-        // Add the URI to the Intent.
-        share.putExtra(Intent.EXTRA_STREAM, ImageUri);
-        PackageManager packManager = getPackageManager();
-        List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(share, PackageManager.MATCH_DEFAULT_ONLY);
-
-        boolean resolved = false;
-        for(ResolveInfo resolveInfo: resolvedInfoList){
-            if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
-                share.setClassName(
-                        resolveInfo.activityInfo.packageName,
-                        resolveInfo.activityInfo.name );
-                resolved = true;
-                break;
-            }
-        }
-        if(resolved){
-            startActivity(share);
-        }else{
-            Toast.makeText(RouteActivity.this, "twitter App is not installed", Toast.LENGTH_LONG).show();
-        }
     }
 
 }

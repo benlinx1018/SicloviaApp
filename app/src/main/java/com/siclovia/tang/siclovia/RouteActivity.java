@@ -2,6 +2,8 @@ package com.siclovia.tang.siclovia;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -40,6 +42,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -49,6 +54,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -56,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.graphics.Color;
 import android.widget.Toast;
 
@@ -75,16 +82,19 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+
 import cz.msebera.android.httpclient.Header;
 
-public class RouteActivity extends AppCompatActivity implements OnMapReadyCallback, ListView.OnItemClickListener,ActionSheet.ActionSheetListener {
+public class RouteActivity extends AppCompatActivity implements OnMapReadyCallback, ListView.OnItemClickListener, ActionSheet.ActionSheetListener {
     public DrawerLayout drawMenu;
     private SupportMapFragment mapFragment;
     private ListView menuList;
     static final int GET_FROM_CAMERA = 1;
     static final int GET_FROM_FILE = 2;
-    private int share_selected=0;
-    ShareDialog fbShareDialog;
+    private int share_selected = 0;
+    private ShareDialog fbShareDialog;
+    private Tracker mTracker;
+
     @Override
     public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
 
@@ -92,17 +102,15 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onOtherButtonClick(ActionSheet actionSheet, int index) {
-        if (index ==0)
-        {
+        if (index == 0) {
             callCameraIntent();
 
-        }
-        else if(index ==1)
-        {
+        } else if (index == 1) {
             callGalleryIntent();
         }
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -110,6 +118,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -122,7 +131,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         @SerializedName("markers")
         public List<Marker> markers;
 
-        public Markers() { markers = new ArrayList<>(); }
+        public Markers() {
+            markers = new ArrayList<>();
+        }
     }
 
     class OwnIconRendered extends DefaultClusterRenderer<AppClusterItem> {
@@ -202,8 +213,13 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
 
         toggle.syncState();
-
-
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+        mTracker = analytics.newTracker("UA-74679680-1");
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("siclovia")
+                .setAction("Start")
+                .build());
         //取得google maps
         mapFragment.getMapAsync(this);
         getSupportFragmentManager().beginTransaction().add(R.id.map_frame, mapFragment).commit();
@@ -298,11 +314,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 drawMenu.setBackgroundColor(Color.parseColor("#FCD214"));
                 break;
             case 3:
-                fragment = SafetyFragment.newInstance("123","321");
+                fragment = SafetyFragment.newInstance("123", "321");
                 drawMenu.setBackgroundResource(R.drawable.safety_bg);
                 break;
             case 4:
-                fragment = DonateFragment.newInstance("123","321");
+                fragment = DonateFragment.newInstance("123", "321");
                 drawMenu.setBackgroundResource(R.drawable.donate_bg);
                 break;
             case 5:
@@ -344,29 +360,28 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
      * @return 是否成功
      **/
     @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_info) {
-                //dispatchTakePictureIntent();
-               // callCameraIntent();
-               // shareToFb("Test","http://joinymca.org//siclovia//json//share//1443380640_.jpg");
-                return true;
-            }
-            if (id == R.id.action_parking) {
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_info) {
+            //dispatchTakePictureIntent();
+            // callCameraIntent();
+            // shareToFb("Test","http://joinymca.org//siclovia//json//share//1443380640_.jpg");
 
-                return true;
-            }
-            if (id == R.id.action_option_icon) {
-                View menuItemView = findViewById(R.id.action_option_icon);
-                showShareMenu(menuItemView);
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
+        }
+        if (id == R.id.action_parking) {
+
+        }
+        if (id == R.id.action_option_icon) {
+            View menuItemView = findViewById(R.id.action_option_icon);
+            showShareMenu(menuItemView);
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -427,9 +442,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude+0.000001, R.drawable.map_icon_water, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.000001, R.drawable.map_icon_water, obj.name, obj.subTitle));
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude-0.000001, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.000001, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
                                     break;
                                 case 8:
                                     googleMap.addMarker(new MarkerOptions()
@@ -464,7 +479,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-    public void setMapOverLay(GoogleMap googleMap){
+    public void setMapOverLay(GoogleMap googleMap) {
         googleMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
                 .position(new LatLng(29.43968, -98.4799), 2100));
@@ -476,17 +491,19 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             startActivityForResult(takePictureIntent, GET_FROM_CAMERA);
         }
     }
-    private void callGalleryIntent(){
+
+    private void callGalleryIntent() {
         Intent i = new Intent(
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         startActivityForResult(i, GET_FROM_FILE);
     }
+
     private void showShareMenu(View view) {
         PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
-        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.custom_layout, null);
 
         View.OnClickListener shareEvent = new View.OnClickListener() {
@@ -514,19 +531,21 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
-    private void shareToFb(Uri link){
+
+    private void shareToFb(Uri link) {
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
                     .setContentTitle("Join me at Siclovia")
                     .setContentDescription(
                             "I am at the Siclovia on Broadway.  Come join us!")
-                    .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                    .setContentUrl(link)
                     .build();
 
             fbShareDialog.show(linkContent);
         }
     }
-    private void shareToTw(Uri filepath){
+
+    private void shareToTw(Uri filepath) {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.putExtra(Intent.EXTRA_TEXT, "Join me at Siclovia on Broadway. #Siclovia");
         // Set the MIME type
@@ -540,8 +559,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(share, PackageManager.MATCH_DEFAULT_ONLY);
 
         boolean resolved = false;
-        for(ResolveInfo resolveInfo: resolvedInfoList){
-            if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
+        for (ResolveInfo resolveInfo : resolvedInfoList) {
+            if (resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")) {
                 share.setClassName(
                         resolveInfo.activityInfo.packageName,
                         resolveInfo.activityInfo.name);
@@ -549,13 +568,14 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 break;
             }
         }
-        if(resolved){
+        if (resolved) {
             startActivity(share);
-        }else{
+        } else {
             Toast.makeText(RouteActivity.this, "twitter App is not installed", Toast.LENGTH_LONG).show();
         }
     }
-    private void shareToIg(Uri filepath){
+
+    private void shareToIg(Uri filepath) {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.putExtra(Intent.EXTRA_TEXT, "share");
         share.setType("image/*");
@@ -565,115 +585,117 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(share, PackageManager.MATCH_DEFAULT_ONLY);
 
         boolean resolved = false;
-        for(ResolveInfo resolveInfo: resolvedInfoList){
-            if(resolveInfo.activityInfo.packageName.startsWith("com.instagram.android")){
+        for (ResolveInfo resolveInfo : resolvedInfoList) {
+            if (resolveInfo.activityInfo.packageName.startsWith("com.instagram.android")) {
                 share.setClassName(
                         resolveInfo.activityInfo.packageName,
-                        resolveInfo.activityInfo.name );
+                        resolveInfo.activityInfo.name);
                 resolved = true;
                 break;
             }
         }
-        if(resolved){
+        if (resolved) {
             startActivity(share);
-        }else{
+        } else {
             Toast.makeText(RouteActivity.this, "instagram App is not installed", Toast.LENGTH_LONG).show();
         }
     }
+
     //照片上傳 By 圖像資料
-    private void uploadPhoto(Bitmap img_bit){
+    private void uploadPhoto(String imgPath, final Uri imgUri, Bitmap img_bit) {
         AsyncHttpClient client = new AsyncHttpClient();
+
         RequestParams params = new RequestParams();
-        if (img_bit != null) {
-            byte[] imagebyte;
-            ByteArrayOutputStream bao = new ByteArrayOutputStream();
-            img_bit.compress(Bitmap.CompressFormat.PNG, 100, bao);
-            imagebyte = bao.toByteArray();
-            params.put("userfile", new ByteArrayInputStream(imagebyte),    System.currentTimeMillis() + ".png");
+        try {
+            File file = new File(imgPath);
+
+            if (file.exists()) {
+
+
+                params.put("userfile", file);
+
+                client.post("http://joinymca.org/siclovia/json/photo.php", new TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        if (share_selected == R.id.option_share_fb)
+                            shareToFb(Uri.parse(responseString));
+                        else if (share_selected == R.id.option_share_tw)
+                            shareToTw(imgUri);
+                        else if (share_selected == R.id.option_share_ig)
+                            shareToIg(imgUri);
+                    }
+                });
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
-        client.post("http://joinymca.org/siclovia/json/photo.php", new FileAsyncHttpResponseHandler(getBaseContext()) {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File response) {
 
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-
-            }
-        });
     }
-    //照片上傳 By 照片位置
-    private void uploadPhoto(String path){
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        File myFile = new File(path);
-        try {
-            params.put("userfile", myFile);
-        } catch(FileNotFoundException e) {}
 
-        client.post("http://joinymca.org/siclovia/json/photo.php", new FileAsyncHttpResponseHandler(getBaseContext()) {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File response) {
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-
-            }
-        });
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ProgressDialog dialog = ProgressDialog.show(this,
+                "", "sharing...", true);
         Bitmap imageBitmap = null;
-        Uri ImageUri = null;//選取檔案實體位置
+        Uri imgURi = null;//選取檔案實體位置
+        String imgPath = null;
+        boolean isOK = false;
         if (requestCode == GET_FROM_CAMERA && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-           imageBitmap = (Bitmap) extras.get("data");
-            ContextWrapper cw = new ContextWrapper(getApplicationContext());
-            File file=new File(Environment.getExternalStorageDirectory()+"/images");
-            if(!file.isDirectory()){
+            imageBitmap = (Bitmap) extras.get("data");
+            File file = new File(Environment.getExternalStorageDirectory() + "/images");
+            if (!file.isDirectory()) {
                 file.mkdir();
             }
-            File mypath=new File(file,"img_"+ System.currentTimeMillis()+".jpg");
+            File imgFile = new File(file, "img_" + System.currentTimeMillis() + ".jpg");
+            imgPath = imgFile.getAbsolutePath();
             FileOutputStream fos = null;
             try {
-                fos = new FileOutputStream(mypath);
-                // Use the compress method on the BitMap object to write image to the OutputStream
+                fos = new FileOutputStream(imgFile);
 
 
-                if( imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos))
-                {
-                   Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_SHORT).show();
-
-                }
-                else{
-                   Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
-
+                if (imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)) {
+                    isOK = true;
+                    //Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_SHORT).show();
+                } else {
+                    isOK = false;
+                    //Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
                 }
 
-                fos.close();
+
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            ImageUri =Uri.fromFile(mypath);
-            shareToTw(ImageUri);
-        }
-        else if(requestCode == GET_FROM_FILE  && null != data){
-            ImageUri = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(ImageUri, filePathColumn, null, null, null);
+            imgURi = Uri.fromFile(imgFile);
+        } else if (requestCode == GET_FROM_FILE && null != data) {
+            isOK = true;
+            imgURi = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(imgURi, filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            imgPath = cursor.getString(columnIndex);
             cursor.close();
-            imageBitmap =BitmapFactory.decodeFile(picturePath);
+            imageBitmap = BitmapFactory.decodeFile(imgPath);
         }
-        //uploadPhoto(imageBitmap);//先上傳到server
+        if (isOK) {
 
+            uploadPhoto(imgPath, imgURi, imageBitmap);//先上傳到server
+
+        }
+        dialog.hide();
     }
+
 }

@@ -22,7 +22,7 @@ import com.google.maps.android.clustering.algo.StaticCluster;
  * Created by PSG-RDAA on 3/5/2016.
  */
 public class DistinctAlgorithm <T extends AppClusterItem> implements Algorithm<T> {
-    public static final int MAX_DISTANCE_AT_ZOOM = 30;
+    public static final int MAX_DISTANCE_AT_ZOOM = 40;
     /**
      * Any modifications should be synchronized on mQuadTree.
      */

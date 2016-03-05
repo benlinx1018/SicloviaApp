@@ -9,6 +9,6 @@
         android:adjustViewBounds="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/option_share_fb"
+        android:id="@+id/map_bar_info_all"
         android:src="@drawable/map_bar_info"/>
 </LinearLayout>

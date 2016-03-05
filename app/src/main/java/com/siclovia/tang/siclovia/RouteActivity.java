@@ -63,6 +63,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import android.graphics.Color;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -129,6 +130,15 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         public Markers() {
             markers = new ArrayList<>();
+        }
+    }
+
+    public class Parkings {
+        @SerializedName("parking")
+        public List<Parking> parkings;
+
+        public Parkings() {
+            parkings = new ArrayList<>();
         }
     }
 
@@ -339,7 +349,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         drawMenu.closeDrawer(GravityCompat.START);
         // TODO: 判斷當前選單避免重複讀取
         menuList.setItemChecked(position, true);
-
     }
 
     @Override
@@ -464,8 +473,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     }
                 }
         );
-
-
     }
 
     public void setMapOverLay(GoogleMap googleMap) {
@@ -506,6 +513,33 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 .newBasicPopupWindow(getApplicationContext());
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.map_bar_parking, null);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://joinymca.org/siclovia/json/parking.php", new TextHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String res) {
+                        Gson gson = new GsonBuilder().create();
+                        Parkings parkingsObj = gson.fromJson(res, Parkings.class);
+                        String tmpName = "";
+                        String tmpRoad = "";
+                        for (Parking obj : parkingsObj.parkings) {
+                            tmpName += obj.name + '\n';
+                            tmpRoad += obj.subTitle + '\n';
+                        }
+                        //setContentView(R.layout.map_bar_parking);
+                        TextView mapbarinfo = (TextView) findViewById(R.id.map_bar_parking_info_name);
+                        TextView mapbarroad = (TextView) findViewById(R.id.map_bar_parking_info_road);
+                        mapbarinfo.setText(tmpName);
+                        mapbarroad.setText(tmpRoad);
+                    }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                    }
+                }
+        );
+
+
         showPopup.setContentView(popupView);
         showPopup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);

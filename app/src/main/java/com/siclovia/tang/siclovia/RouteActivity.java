@@ -68,6 +68,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -121,6 +124,40 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         public Markers() { markers = new ArrayList<>(); }
     }
+
+    class OwnIconRendered extends DefaultClusterRenderer<AppClusterItem> {
+        public OwnIconRendered(Context context, GoogleMap map,
+                               ClusterManager<AppClusterItem> clusterManager) {
+            super(context, map, clusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(AppClusterItem item, MarkerOptions markerOptions) {
+            // Draw a single person.
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(item.getIcon()));
+            markerOptions.snippet(item.getSnippet());
+            markerOptions.title(item.getTitle());
+            super.onBeforeClusterItemRendered(item, markerOptions);
+        }
+
+        @Override
+        protected void onBeforeClusterRendered(Cluster<AppClusterItem> cluster, MarkerOptions markerOptions) {
+            // Draw multiple people.
+            for (AppClusterItem item : cluster.getItems()) {
+                markerOptions.snippet(item.getSnippet());
+                markerOptions.title(item.getTitle());
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_reclovia));
+                break;
+            }
+        }
+
+        @Override
+        protected boolean shouldRenderAsCluster(Cluster cluster) {
+            // Always render clusters.
+            return cluster.getSize() > 1;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -342,6 +379,19 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         client.get("http://joinymca.org/siclovia/json/markers.php", new TextHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String res) {
+                        //MARKER
+                        ClusterManager<AppClusterItem> mClusterManager;
+                        mClusterManager = new ClusterManager<AppClusterItem>(RouteActivity.this, googleMap);
+                        mClusterManager.setRenderer(new OwnIconRendered(RouteActivity.this, googleMap, mClusterManager));
+                        googleMap.setOnCameraChangeListener(mClusterManager);
+                        googleMap.setOnMarkerClickListener(mClusterManager);
+                        googleMap.setOnInfoWindowClickListener(mClusterManager);
+                        /*
+                        mClusterManager.setOnClusterClickListener(this);
+                        mClusterManager.setOnClusterInfoWindowClickListener(this);
+                        mClusterManager.setOnClusterItemClickListener(this);
+                        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+                        */
                         Gson gson = new GsonBuilder().create();
 
                         // Define Response class to correspond to the JSON response returned
@@ -351,10 +401,57 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             String[] latlong = obj.location.substring(1, obj.location.length() - 1).split(",");
                             double latitude = Double.parseDouble(latlong[0]);
                             double longitude = Double.parseDouble(latlong[1]);
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(latitude, longitude))
-                                    .title(obj.name));
+
+                            /*
+                            //1 Open Intersection           Green point
+                            //3 Start & Finish Line         STOP Icon
+                            //4 Water, Restroom, First Aid  R -> 3Icon
+                            //8 Parking                     P point
+                            //9 Closed Intersection         Red point
+                            */
+                            switch (obj.type) {
+                                case 1:
+                                    googleMap.addMarker(new MarkerOptions()
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_greenpoint))
+                                            .title(obj.subTitle)
+                                            .snippet(obj.name)
+                                            .position(new LatLng(latitude, longitude)));
+                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_greenpoint, obj.name, obj.subTitle));
+                                    break;
+                                case 3:
+                                    googleMap.addMarker(new MarkerOptions()
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_stoppoint))
+                                            .title(obj.subTitle)
+                                            .snippet(obj.name)
+                                            .position(new LatLng(latitude, longitude)));
+                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
+                                    break;
+                                case 4:
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude+0.000001, R.drawable.map_icon_water, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude-0.000001, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+                                    break;
+                                case 8:
+                                    googleMap.addMarker(new MarkerOptions()
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_parking))
+                                            .title(obj.subTitle)
+                                            .snippet(obj.name)
+                                            .position(new LatLng(latitude, longitude)));
+                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_parking, obj.name, obj.subTitle));
+                                    break;
+                                case 9:
+                                    googleMap.addMarker(new MarkerOptions()
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_redpoint))
+                                            .title(obj.subTitle)
+                                            .snippet(obj.name)
+                                            .position(new LatLng(latitude, longitude)));
+                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_redpoint, obj.name, obj.subTitle));
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                        mClusterManager.cluster();
                     }
 
                     @Override
@@ -367,11 +464,12 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
-    public void setMapOverLay(GoogleMap googleMap) {
+    public void setMapOverLay(GoogleMap googleMap){
         googleMap.addGroundOverlay(new GroundOverlayOptions()
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
                 .position(new LatLng(29.43968, -98.4799), 2100));
     }
+
     private void callCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -578,5 +676,4 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         //uploadPhoto(imageBitmap);//先上傳到server
 
     }
-
 }

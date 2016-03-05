@@ -623,11 +623,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             e.printStackTrace();
         }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
 
-            }
-        });
     }
 
     @Override
@@ -659,10 +655,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     isOK = false;
                     //Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                   Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
 
-                }
 
             } catch (Exception e) {
                 e.printStackTrace();

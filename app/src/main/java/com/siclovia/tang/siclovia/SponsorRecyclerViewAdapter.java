@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.Utilities;
+
 import java.util.List;
 
 public class SponsorRecyclerViewAdapter extends RecyclerView.Adapter<SponsorRecyclerViewAdapter.ViewHolder> {
@@ -36,11 +39,7 @@ public class SponsorRecyclerViewAdapter extends RecyclerView.Adapter<SponsorRecy
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    Uri uri = Uri.parse(sponserList.get(position).webLink);
-                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
-                    v.getContext().startActivity(i);
-
+                Utilities.openActionView(v.getContext(),Uri.parse(sponserList.get(position).webLink));
             }
         });
     }

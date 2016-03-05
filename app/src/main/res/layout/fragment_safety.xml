@@ -6,34 +6,41 @@
     android:paddingLeft="5dp"
     android:paddingRight="5dp">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageButton
-            android:layout_width="300dp"
+            android:id="@+id/safety_igBtnTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:background="@null"
-            android:padding="5dp"
+            android:layout_weight="6"
+            android:background="#00000000"
+            android:maxWidth="300dp"
+            android:scaleType="centerInside"
+            style="?android:borderlessButtonStyle"
             android:src="@drawable/safety_title" />
 
-        <ImageView
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/safety_igBtnArrow"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:paddingLeft="5dp"
+            android:scaleType="centerInside"
             android:src="@drawable/safety_arrow" />
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/safety_igBtnContent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-25dp"
-        android:adjustViewBounds="true"
+        android:background="@null"
+        android:scaleType="centerInside"
         android:src="@drawable/safety_content" />
 
 

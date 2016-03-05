@@ -6,21 +6,25 @@
 
 
     <ImageButton
+        android:id="@+id/donate_igBtnTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:adjustViewBounds="true"
         android:background="@null"
+        android:scaleType="centerInside"
         android:src="@drawable/donate_title" />
 
 
     <ImageButton
+        android:id="@+id/donate_igBtnGetStarted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="30dp"
         android:adjustViewBounds="true"
+        android:scaleType="centerInside"
         android:background="@drawable/donate_getstarted" />
 
 

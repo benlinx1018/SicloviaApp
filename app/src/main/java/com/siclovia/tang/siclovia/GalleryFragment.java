@@ -1,7 +1,10 @@
 package com.siclovia.tang.siclovia;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,6 +22,9 @@ import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +35,7 @@ public class GalleryFragment extends Fragment {
 
     MyPhotoRecyclerViewAdapter photoAdapter;
     public final List<Photo> photos = new ArrayList<>();
+
     public GalleryFragment() {
     }
 
@@ -43,7 +50,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        photoAdapter =new MyPhotoRecyclerViewAdapter(photos);
+        photoAdapter = new MyPhotoRecyclerViewAdapter(getActivity().getBaseContext(),photos);
         //get all sponsors
         new AsyncHttpClient().get("http://joinymca.org/siclovia/json/gallery.php", new TextHttpResponseHandler() {
                     @Override
@@ -53,23 +60,26 @@ public class GalleryFragment extends Fragment {
                         Photos photosObj = gson.fromJson(res, Photos.class);
                         //add to adapter list
                         photos.addAll(photosObj.photos);
+                        photoAdapter.notifyDataSetChanged();
                         //get each sponsor's web logo Image
-                        for (final Photo photo: photos) {
-                            AsyncHttpClient client = new AsyncHttpClient();
+//                        for(int i=0;i<photos.size();i++)
+//                     {
 
-                            client.get(photo.uri, new FileAsyncHttpResponseHandler(getActivity().getBaseContext()) {
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, File response) {
-                                    photo.Image= BitmapFactory.decodeFile(response.getPath());
-                                    photoAdapter.notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-
-                                }
-                            });
-                        }
+//                            AsyncHttpClient client = new AsyncHttpClient();
+//
+//                            client.get(photo.uri, new FileAsyncHttpResponseHandler(getActivity().getBaseContext()) {
+//                                @Override
+//                                public void onSuccess(int statusCode, Header[] headers, File response) {
+//                                    photo.Image = BitmapFactory.decodeFile(response.getPath());
+//                                    photoAdapter.notifyDataSetChanged();
+//                                }
+//
+//                                @Override
+//                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+//
+//                                }
+//                            });
+//                        }
                     }
 
                     @Override
@@ -80,6 +90,7 @@ public class GalleryFragment extends Fragment {
         );
 
     }
+
     class Photos {
         @SerializedName("photo")
         public List<Photo> photos;
@@ -88,6 +99,7 @@ public class GalleryFragment extends Fragment {
             photos = new ArrayList<>();
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,7 +109,7 @@ public class GalleryFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = layoutView.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new GridLayoutManager(context,3));
+            recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
             // Set the adapter
             recyclerView.setAdapter(photoAdapter);
         }
@@ -116,7 +128,6 @@ public class GalleryFragment extends Fragment {
         super.onDetach();
 
     }
-
 
 
 }

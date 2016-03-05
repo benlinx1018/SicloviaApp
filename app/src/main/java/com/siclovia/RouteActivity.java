@@ -427,9 +427,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.0003, R.drawable.map_icon_water, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.0003, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.0004, R.drawable.map_icon_water, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude , R.drawable.map_icon_hell, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.0004, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
                                     break;
                                 case 8:
                                     googleMap.addMarker(new MarkerOptions()
@@ -489,17 +489,18 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.map_info, null);
         showPopup.setContentView(popupView);
-        showPopup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
 
     private void showParkingMenu(View view) {
-        PopupWindow showPopup = PopupHelper
+        final PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.map_bar_parking, null);
+        showPopup.setContentView(popupView);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://joinymca.org/siclovia/json/parking.php", new TextHttpResponseHandler() {
@@ -513,12 +514,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             tmpName += obj.name + '\n';
                             tmpRoad += obj.subTitle + '\n';
                         }
-                        //setContentView(R.layout.map_bar_parking);
-                        TextView mapbarinfo = (TextView) findViewById(R.id.map_bar_parking_info_name);
-                        TextView mapbarroad = (TextView) findViewById(R.id.map_bar_parking_info_road);
-                        mapbarinfo.setText(tmpName);
-                        mapbarroad.setText(tmpRoad);
+                        ((TextView)showPopup.getContentView().findViewById(R.id.map_bar_parking_info_name)).setText(tmpName);
+                        ((TextView)showPopup.getContentView().findViewById(R.id.map_bar_parking_info_road)).setText(tmpRoad);
+
                     }
+
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
                         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
@@ -526,9 +526,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
         );
 
-
-        showPopup.setContentView(popupView);
-        showPopup.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);

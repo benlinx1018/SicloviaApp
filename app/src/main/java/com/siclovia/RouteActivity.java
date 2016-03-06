@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.graphics.Color;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +83,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     private int share_selected = 0;
     private ShareDialog fbShareDialog;
     private Tracker mTracker;
+    private MenuItem infoOption, parkingOption;
 
     @Override
     public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
@@ -98,12 +100,14 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         }
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
 
 
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -282,13 +286,14 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Handle navigation view item clicks here.
 
-
         Fragment fragment = null;
         android.support.v4.app.FragmentManager sfm = getSupportFragmentManager();
         if (mapFragment.isAdded()) {
             sfm.beginTransaction().hide(mapFragment).commit();
         }
 
+        infoOption.setVisible(position == 2);
+        parkingOption.setVisible(position == 2);
         switch (position) {
             case 0:
                 fragment = new SponsorFragment();
@@ -305,6 +310,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     sfm.beginTransaction().show(mapFragment).commit();
                 }
                 drawMenu.setBackgroundColor(Color.parseColor("#FCD214"));
+
                 break;
             case 3:
                 fragment = SafetyFragment.newInstance();
@@ -334,7 +340,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     .commit();
         }
         drawMenu.closeDrawer(GravityCompat.START);
-        // TODO: 判斷當前選單避免重複讀取
+
         menuList.setItemChecked(position, true);
     }
 
@@ -342,6 +348,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.route, menu);
+        infoOption = menu.findItem(R.id.action_info);
+        parkingOption = menu.findItem(R.id.action_parking);
         return true;
     }
 
@@ -428,7 +436,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     break;
                                 case 4:
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.0004, R.drawable.map_icon_water, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude , R.drawable.map_icon_hell, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.0004, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
                                     break;
                                 case 8:
@@ -514,8 +522,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             tmpName += obj.name + '\n';
                             tmpRoad += obj.subTitle + '\n';
                         }
-                        ((TextView)showPopup.getContentView().findViewById(R.id.map_bar_parking_info_name)).setText(tmpName);
-                        ((TextView)showPopup.getContentView().findViewById(R.id.map_bar_parking_info_road)).setText(tmpRoad);
+                        ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_name)).setText(tmpName);
+                        ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_road)).setText(tmpRoad);
 
                     }
 
@@ -628,6 +636,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             Toast.makeText(RouteActivity.this, "instagram App is not installed", Toast.LENGTH_LONG).show();
         }
     }
+
     //照片上傳 By 圖像資料
     private void uploadPhoto(String imgPath, final Uri imgUri, Bitmap img_bit) {
 
@@ -639,7 +648,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 RequestParams params = new RequestParams();
                 params.put("userfile", file);
 
-                client.post("http://joinymca.org/siclovia/json/photo.php",params, new TextHttpResponseHandler() {
+                client.post("http://joinymca.org/siclovia/json/photo.php", params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 

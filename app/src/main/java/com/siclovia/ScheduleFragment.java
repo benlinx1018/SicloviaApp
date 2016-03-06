@@ -26,7 +26,11 @@ import com.loopj.android.http.*;
 import cz.msebera.android.httpclient.Header;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -121,7 +125,7 @@ public class ScheduleFragment extends Fragment {
                         break;
                     //Reminder
                     case 1:
-
+                        addToCalender(events.get(position));
                         break;
                 }
                 return false;
@@ -144,18 +148,7 @@ public class ScheduleFragment extends Fragment {
             startActivity(intent);
         }
     }
-    public void addToCalender(){
-        Intent intent = new Intent(Intent.ACTION_EDIT);
-        intent.setType("vnd.android.cursor.item/event");
-        intent.putExtra(CalendarContract.Events.TITLE, "test title");
-        //intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-        //        startDateMillis);
-        //intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-        //        endDateMillis);
-        intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, "test des");
-        //TODO: redminder to schedule
-    }
+
 
     class EventsObj {
 
@@ -188,14 +181,14 @@ public class ScheduleFragment extends Fragment {
                 convertView = View.inflate(getActivity().getApplicationContext(),
                         R.layout.fragment_event, null);
             }
+
             ViewHolder holder =  new ViewHolder(convertView);
-            Event item = getItem(position);
+            final Event item = getItem(position);
 
             holder.txtTime.setText(item.time);
             holder.txtAmpm.setText(item.ampm);
             holder.txtTitle.setText(item.title);
             holder.txtSubTitle.setText(item.subTitle);
-
 
             return convertView;
         }
@@ -215,5 +208,27 @@ public class ScheduleFragment extends Fragment {
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
+    }
+    public void addToCalender(Event e){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date time  =  dateFormat.parse(e.date+" "+e.realtime);
+            Calendar c  =Calendar.getInstance() ;
+            c.setTime(time);
+            Intent intent = new Intent(Intent.ACTION_EDIT);
+            intent.setType("vnd.android.cursor.item/event");
+            intent.putExtra(CalendarContract.Events.TITLE, e.title);
+            intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,c.getTimeInMillis()
+            );
+            c.add(Calendar.HOUR, 1);
+            intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                    c.getTimeInMillis());
+            intent.putExtra(CalendarContract.Events.ALL_DAY, false);// periodicity
+            intent.putExtra(CalendarContract.Events.DESCRIPTION, e.subTitle);
+            startActivity(intent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 }

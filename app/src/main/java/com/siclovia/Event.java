@@ -17,5 +17,7 @@ public class Event {
     public String lon;
     @SerializedName("date")
     public String date;
+    @SerializedName("realtime")
+    public String realtime;
 
 }

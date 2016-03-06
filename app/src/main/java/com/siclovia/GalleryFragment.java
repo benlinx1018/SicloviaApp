@@ -30,7 +30,6 @@ public class GalleryFragment extends Fragment {
     public GalleryFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static GalleryFragment newInstance() {
         GalleryFragment fragment = new GalleryFragment();

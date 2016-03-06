@@ -11,7 +11,8 @@
     <permission
         android:name="com.siclovia.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -86,7 +87,7 @@
         <!-- TODO:Google Map Api Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCiATd19CTcnjfdnJ8WJ2lDozJjq_wH8mc" />
+            android:value="AlzaSyD3SUbY_phx13coBmeKQc40qjEF_VUtlJk" />
 
         <activity android:name=".PhotoActivity"
             android:screenOrientation="portrait"

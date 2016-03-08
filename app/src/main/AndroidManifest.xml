@@ -11,6 +11,7 @@
     <permission
         android:name="com.siclovia.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -74,11 +75,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!-- TODO:FB Api key -->
         <meta-data
@@ -89,9 +85,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AlzaSyD3SUbY_phx13coBmeKQc40qjEF_VUtlJk" />
 
-        <activity android:name=".PhotoActivity"
+        <activity
+            android:name=".PhotoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Transparent"></activity>
+            android:theme="@style/AppTheme.Transparent" />
+        <activity android:name=".SplashActivity"
+            android:theme="@style/SplashTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

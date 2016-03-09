@@ -1,4 +1,4 @@
-package com.baoyz.swipemenulistview;
+package com.components.swipemenulistview;
 
 import java.util.List;
 

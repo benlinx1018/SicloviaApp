@@ -1,4 +1,4 @@
-package com.baoyz.swipemenulistview;
+package com.components.swipemenulistview;
 
 import android.content.Context;
 import android.support.v4.view.GestureDetectorCompat;

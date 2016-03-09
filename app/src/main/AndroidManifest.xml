@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.siclovia.permission.C2D_MESSAGE" />
+
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <uses-feature
@@ -48,7 +49,7 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="com.example.gcm" />
+                <category android:name="com.siclovia" />
             </intent-filter>
         </receiver>
 
@@ -74,8 +75,7 @@
             android:name=".RouteActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <!-- TODO:FB Api key -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -89,8 +89,10 @@
             android:name=".PhotoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Transparent" />
-        <activity android:name=".SplashActivity"
-            android:theme="@style/SplashTheme" >
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

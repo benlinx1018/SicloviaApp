@@ -1,4 +1,4 @@
-package com;
+package com.components;
 import android.animation.Animator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;

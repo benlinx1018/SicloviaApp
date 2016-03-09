@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.components;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +10,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import com.siclovia.R;
 
 
 public class PopupHelper {

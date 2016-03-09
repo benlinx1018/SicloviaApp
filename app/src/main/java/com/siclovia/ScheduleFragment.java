@@ -14,10 +14,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
-import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.components.swipemenulistview.SwipeMenu;
+import com.components.swipemenulistview.SwipeMenuCreator;
+import com.components.swipemenulistview.SwipeMenuItem;
+import com.components.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.*;

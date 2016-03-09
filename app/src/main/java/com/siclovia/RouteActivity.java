@@ -31,6 +31,8 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 
+import com.components.ActionSheet;
+import com.components.PopupHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
@@ -51,7 +53,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.graphics.Color;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,14 +101,12 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         }
 
     }
-
     @Override
     protected void onResume() {
         super.onResume();
 
 
     }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -286,7 +285,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Handle navigation view item clicks here.
 
-        Fragment fragment = null;
+
+
         android.support.v4.app.FragmentManager sfm = getSupportFragmentManager();
         if (mapFragment.isAdded()) {
             sfm.beginTransaction().hide(mapFragment).commit();
@@ -294,6 +294,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         infoOption.setVisible(position == 2);
         parkingOption.setVisible(position == 2);
+
+        Fragment fragment = null;
         switch (position) {
             case 0:
                 fragment = new SponsorFragment();
@@ -310,7 +312,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     sfm.beginTransaction().show(mapFragment).commit();
                 }
                 drawMenu.setBackgroundColor(Color.parseColor("#FCD214"));
-
                 break;
             case 3:
                 fragment = SafetyFragment.newInstance();
@@ -421,37 +422,40 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                 case 1:
                                     googleMap.addMarker(new MarkerOptions()
                                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_greenpoint))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
+                                            .title(obj.name)
+                                            .snippet(obj.subTitle)
                                             .position(new LatLng(latitude, longitude)));
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_greenpoint, obj.name, obj.subTitle));
                                     break;
                                 case 3:
                                     googleMap.addMarker(new MarkerOptions()
                                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_stoppoint))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
+                                            .title(obj.name)
+                                            .snippet(obj.subTitle)
                                             .position(new LatLng(latitude, longitude)));
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.0004, R.drawable.map_icon_water, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.0004, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+                                    //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_reclovia, obj.name, obj.subTitle));
+
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.0005, R.drawable.map_icon_water, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude , R.drawable.map_icon_hell, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.0005, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
+
                                     break;
                                 case 8:
                                     googleMap.addMarker(new MarkerOptions()
                                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_parking))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
+                                            .title(obj.name)
+                                            .snippet(obj.subTitle)
                                             .position(new LatLng(latitude, longitude)));
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_parking, obj.name, obj.subTitle));
                                     break;
                                 case 9:
                                     googleMap.addMarker(new MarkerOptions()
                                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_redpoint))
-                                            .title(obj.subTitle)
-                                            .snippet(obj.name)
+                                            .title(obj.name)
+                                            .snippet(obj.subTitle)
                                             .position(new LatLng(latitude, longitude)));
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_redpoint, obj.name, obj.subTitle));
                                     break;
@@ -502,38 +506,49 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
-
+    private Parkings parkingsObj=null;
     private void showParkingMenu(View view) {
         final PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.map_bar_parking, null);
         showPopup.setContentView(popupView);
+        if(parkingsObj==null) {
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get("http://joinymca.org/siclovia/json/parking.php", new TextHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String res) {
+                            Gson gson = new GsonBuilder().create();
+                            parkingsObj = gson.fromJson(res, Parkings.class);
+                            String tmpName = "";
+                            String tmpRoad = "";
+                            for (Parking obj : parkingsObj.parkings) {
+                                tmpName += obj.name + '\n';
+                                tmpRoad += obj.subTitle + '\n';
+                            }
+                            ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_name)).setText(tmpName);
+                            ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_road)).setText(tmpRoad);
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://joinymca.org/siclovia/json/parking.php", new TextHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String res) {
-                        Gson gson = new GsonBuilder().create();
-                        Parkings parkingsObj = gson.fromJson(res, Parkings.class);
-                        String tmpName = "";
-                        String tmpRoad = "";
-                        for (Parking obj : parkingsObj.parkings) {
-                            tmpName += obj.name + '\n';
-                            tmpRoad += obj.subTitle + '\n';
                         }
-                        ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_name)).setText(tmpName);
-                        ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_road)).setText(tmpRoad);
 
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                            // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                        }
                     }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
-                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                    }
-                }
-        );
-
+            );
+        }
+        else
+        {
+            String tmpName = "";
+            String tmpRoad = "";
+            for (Parking obj : parkingsObj.parkings) {
+                tmpName += obj.name + '\n';
+                tmpRoad += obj.subTitle + '\n';
+            }
+            ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_name)).setText(tmpName);
+            ((TextView) showPopup.getContentView().findViewById(R.id.map_bar_parking_info_road)).setText(tmpRoad);
+        }
         showPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
@@ -636,7 +651,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             Toast.makeText(RouteActivity.this, "instagram App is not installed", Toast.LENGTH_LONG).show();
         }
     }
-
     //照片上傳 By 圖像資料
     private void uploadPhoto(String imgPath, final Uri imgUri, Bitmap img_bit) {
 

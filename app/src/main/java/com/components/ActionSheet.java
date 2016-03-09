@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.components;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.siclovia.R;
 
 
 public class ActionSheet extends Fragment implements View.OnClickListener {

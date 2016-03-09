@@ -33,7 +33,7 @@ import com.siclovia.RouteActivity;
 
 public class MyGcmListenerService extends GcmListenerService {
 
-    private static final String TAG = "MyGcmListenerService";
+    private static final String TAG = "gcm";
 
     /**
      * Called when message is received.

@@ -21,7 +21,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package com.baoyz.swipemenulistview;
+package com.components.swipemenulistview;
 
 import android.widget.BaseAdapter;
 

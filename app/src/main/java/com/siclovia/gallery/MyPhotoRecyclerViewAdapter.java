@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
-import com.Photo;
-import com.PhotoActivity;
 import com.siclovia.R;
 import com.siclovia.RouteActivity;
 import com.squareup.picasso.Picasso;

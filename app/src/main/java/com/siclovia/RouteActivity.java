@@ -71,7 +71,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.siclovia.donate.DonateFragment;
-import com.GalleryFragment;
+import com.siclovia.gallery.GalleryFragment;
 import com.SafetyFragment;
 import com.siclovia.schedule.ScheduleFragment;
 import com.siclovia.social.FeedFragment;

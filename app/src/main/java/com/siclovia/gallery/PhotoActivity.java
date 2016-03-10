@@ -72,7 +72,7 @@ public class PhotoActivity extends AppCompatActivity {
         public TargetPhoneGallery(Context context,ContentResolver r, String name, String desc)
         {
             this.context =context;
-            this.resolver = new WeakReference<>(r);
+            this.resolver = new WeakReference<ContentResolver>(r);
             this.name = name;
             this.desc = desc;
         }

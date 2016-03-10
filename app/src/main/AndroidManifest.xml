@@ -45,10 +45,6 @@
             android:value="AIzaSyDsuHBp4KAC7IyyPaWbEFUbdiFxcY1zeYo" />
 
         <activity
-            android:name="com.PhotoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Transparent" />
-        <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">

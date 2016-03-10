@@ -34,7 +34,6 @@ import android.widget.SimpleAdapter;
 import com.components.ActionSheet;
 import com.components.PopupHelper;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -71,6 +70,10 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.siclovia.donate.DonateFragment;
+import com.siclovia.schedule.ScheduleFragment;
+import com.siclovia.social.FeedFragment;
+import com.siclovia.sponser.SponsorFragment;
 
 
 import cz.msebera.android.httpclient.Header;
@@ -199,7 +202,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         toggle.syncState();
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
-        mTracker = analytics.newTracker("UA-50541010-4");
+        mTracker = analytics.newTracker(getString(R.string.ga_trackingId));
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory("siclovia")
                 .setAction("Start")
@@ -384,7 +387,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String res) {
                         //MARKER
-                        ClusterManager<AppClusterItem> mClusterManager = new ClusterManager<AppClusterItem>(RouteActivity.this, googleMap);
+                        ClusterManager<AppClusterItem> mClusterManager = new ClusterManager<>(RouteActivity.this, googleMap);
                         mClusterManager.setRenderer(new OwnIconRendered(RouteActivity.this, googleMap, mClusterManager));
                         //Distinct
                         mClusterManager.setAlgorithm(new DistinctAlgorithm());
@@ -399,6 +402,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                         for (Marker obj : markersObj.markers) {
                             Log.d("Map Marker", "onSuccess: " + obj.location);
                             String[] latlong = obj.location.substring(1, obj.location.length() - 1).split(",");
+
+
+
                             double latitude = Double.parseDouble(latlong[0]);
                             double longitude = Double.parseDouble(latlong[1]);
 
@@ -452,7 +458,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     break;
                                 default:
                                     break;
+
                             }
+
+
                         }
                         mClusterManager.cluster();
                     }
@@ -762,35 +771,38 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
             File file = new File(Environment.getExternalStorageDirectory() + "/images");
+            boolean result =false;
             if (!file.isDirectory()) {
-                file.mkdir();
+                result = file.mkdir();
             }
-            File imgFile = new File(file, "img_" + System.currentTimeMillis() + ".jpg");
-            imgPath = imgFile.getAbsolutePath();
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(imgFile);
-
-
-                if (imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)) {
-                    isOK = true;
-                    //Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_SHORT).show();
-                } else {
-                    isOK = false;
-                    //Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
+            if(result) {
+                File imgFile = new File(file, "img_" + System.currentTimeMillis() + ".jpg");
+                imgPath = imgFile.getAbsolutePath();
+                FileOutputStream fos = null;
                 try {
-                    fos.close();
-                } catch (IOException e) {
+                    fos = new FileOutputStream(imgFile);
+
+
+                    if (imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos))
+                        isOK = true;
+                        //Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_SHORT).show();
+                    else
+                        isOK = false;
+                        //Toast.makeText(getApplicationContext(), "Image not save.", Toast.LENGTH_SHORT).show();
+
+
+
+                } catch (Exception e) {
                     e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+                imgURi = Uri.fromFile(imgFile);
             }
-            imgURi = Uri.fromFile(imgFile);
         } else if (requestCode == GET_FROM_FILE && null != data) {
             isOK = true;
             imgURi = data.getData();

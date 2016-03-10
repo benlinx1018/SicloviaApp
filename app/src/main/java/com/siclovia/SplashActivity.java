@@ -14,7 +14,7 @@ import android.util.Log;
 import com.Utilities;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.notification.RegistrationIntentService;
+import com.siclovia.notification.RegistrationIntentService;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -70,9 +70,9 @@ public class SplashActivity extends AppCompatActivity {
     private boolean isNetWorkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
+        if (networkInfo != null && networkInfo.isConnected())
             return true;
-        }
+
         return false;
     }
 

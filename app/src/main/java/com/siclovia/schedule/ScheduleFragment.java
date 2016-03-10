@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.siclovia.schedule;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +21,7 @@ import com.components.swipemenulistview.SwipeMenuListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.*;
+import com.siclovia.R;
 
 
 import cz.msebera.android.httpclient.Header;

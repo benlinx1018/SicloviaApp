@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.siclovia.donate;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.Utilities;
-
+import com.siclovia.R;
 
 
 public class DonateFragment extends Fragment {
@@ -20,9 +20,9 @@ public class DonateFragment extends Fragment {
 
 
     public static DonateFragment newInstance() {
-        DonateFragment fragment = new DonateFragment();
 
-        return fragment;
+
+        return new DonateFragment();
     }
 
     @Override

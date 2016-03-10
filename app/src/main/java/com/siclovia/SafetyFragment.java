@@ -14,12 +14,11 @@ import android.widget.ImageView;
 import com.Utilities;
 
 
-
 public class SafetyFragment extends Fragment {
 
     public static SafetyFragment newInstance() {
-        SafetyFragment fragment = new SafetyFragment();
-        return fragment;
+
+        return new SafetyFragment();
     }
 
     @Override

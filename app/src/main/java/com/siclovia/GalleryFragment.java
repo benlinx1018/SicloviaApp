@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.siclovia.gallery.MyPhotoRecyclerViewAdapter;
 
 
 import java.util.ArrayList;
@@ -32,9 +33,9 @@ public class GalleryFragment extends Fragment {
 
     @SuppressWarnings("unused")
     public static GalleryFragment newInstance() {
-        GalleryFragment fragment = new GalleryFragment();
 
-        return fragment;
+
+        return new GalleryFragment();
     }
 
     @Override

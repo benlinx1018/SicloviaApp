@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.siclovia.sponser;
 
 
 
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.Utilities;
+import com.siclovia.R;
 
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.siclovia.schedule;
 
 import com.google.gson.annotations.SerializedName;
 

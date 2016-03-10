@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.notification;
+package com.siclovia.notification;
 
 public class QuickstartPreferences {
 

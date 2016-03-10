@@ -1,6 +1,6 @@
 
 
-package com.notification;
+package com.siclovia.notification;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -38,10 +38,12 @@ public class RegistrationIntentService extends IntentService {
             // See https://developers.google.com/cloud-messaging/android/start for details on this file.
             // [START get_token]
             InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            String id = getString(R.string.gcm_defaultSenderId);
+            Log.i(TAG, "Sender ID:" + id);
+            String token = instanceID.getToken(id,
+            GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
-            Log.i(TAG, "GCM Registration Token: " + token);
+            Log.i(TAG, "GCM Registration Token:" + token);
 
 
             sendRegistrationToServer(token);
@@ -67,7 +69,7 @@ public class RegistrationIntentService extends IntentService {
 
     /**
      * Persist registration to third-party servers.
-     *
+     * <p>
      * Modify this method to associate the user's GCM registration token with any server-side account
      * maintained by your application.
      *

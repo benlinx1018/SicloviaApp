@@ -8,9 +8,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-    <permission
-        android:name="com.siclovia.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+
 
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
@@ -19,8 +17,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.siclovia.permission.C2D_MESSAGE" />
 
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <uses-feature
@@ -35,47 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- TODO:FB Api key   FacebookContentProvider{APIKey} -->
-        <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider1512809195692385"
-            android:exported="true" />
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.siclovia" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="com.notification.MyGcmListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="com.notification.MyInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="com.notification.RegistrationIntentService"
-            android:exported="false" />
-
-        <activity
-            android:name=".RouteActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
         <!-- TODO:FB Api key -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -83,7 +42,7 @@
         <!-- TODO:Google Map Api Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBLWDJLUFLbd3rCrn3_tEMrIDmm9edq9G4" />
+            android:value="AIzaSyDsuHBp4KAC7IyyPaWbEFUbdiFxcY1zeYo" />
 
         <activity
             android:name=".PhotoActivity"
@@ -99,6 +58,47 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name=".RouteActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <!-- TODO:FB Api key   FacebookContentProvider{APIKey} -->
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1512809195692385"
+            android:exported="true" />
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.siclovia" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.siclovia.notification.MyGcmListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.siclovia.notification.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.siclovia.notification.RegistrationIntentService"
+            android:exported="false" />
+
     </application>
 
 </manifest>

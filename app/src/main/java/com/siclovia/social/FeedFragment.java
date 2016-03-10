@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.siclovia.social;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
+import com.siclovia.R;
 
 
 public class FeedFragment extends Fragment implements TabHost.OnTabChangeListener {
@@ -20,9 +21,11 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
 
     private TabHost mTabHost;
     private View mRoot;
+
     public FeedFragment() {
 
     }
+
     public static FeedFragment newInstance() {
         FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
@@ -52,7 +55,7 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
                 String url = "https://www.facebook.com/Siclovia";
                 Uri uri = Uri.parse(url);
                 try {
-                    ApplicationInfo applicationInfo =     v.getContext().getPackageManager().getApplicationInfo("com.facebook.katana", 0);
+                    ApplicationInfo applicationInfo = v.getContext().getPackageManager().getApplicationInfo("com.facebook.katana", 0);
                     if (applicationInfo.enabled) {
                         // http://stackoverflow.com/a/24547437/1048340
                         uri = Uri.parse("fb://facewebmodal/f?href=" + url);
@@ -61,7 +64,6 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
 
                 }
                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, uri));
-
 
 
             }
@@ -74,12 +76,13 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
                 String url = "https://twitter.com/Siclovia";
                 Uri uri = Uri.parse(url);
                 try {
-                    ApplicationInfo applicationInfo =     v.getContext().getPackageManager().getApplicationInfo("com.twitter.android", 0);
+                    ApplicationInfo applicationInfo = v.getContext().getPackageManager().getApplicationInfo("com.twitter.android", 0);
                     if (applicationInfo.enabled) {
 
                         uri = Uri.parse("twitter://user?user_id=348660858");
                     }
                 } catch (Exception e) {
+
                 }
                 v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
@@ -96,6 +99,7 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
         mTabHost.addTab(newTab("tw", R.drawable.tab_tw, R.id.webView1));
         mTabHost.addTab(newTab("fb", R.drawable.tab_fb, R.id.webView2));
     }
+
     private TabHost.TabSpec newTab(String tag, int ImgRes, int tabContentId) {
         View indicator = LayoutInflater.from(getActivity()).inflate(
                 R.layout.tab,
@@ -114,6 +118,7 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
         super.onActivityCreated(savedInstanceState);
         //setRetainInstance(true);優化用
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -121,19 +126,16 @@ public class FeedFragment extends Fragment implements TabHost.OnTabChangeListene
 
     @Override
     public void onTabChanged(String tabId) {
-        String url ="";
+        String url = "";
         //chang WebView Uri
-        if(tabId.equals("tw"))
-        {
+        if (tabId.equals("tw")) {
             url = "http://joinymca.org/siclovia/twfeed.php";
 
-        }
-        else if(tabId.equals("fb"))
-        {
+        } else if (tabId.equals("fb")) {
             url = "http://joinymca.org/siclovia/fbfeed.php";
         }
-        ((WebView)mTabHost.getCurrentView()).getSettings().setUseWideViewPort(true);
-        ((WebView)mTabHost.getCurrentView()).getSettings().setLoadWithOverviewMode(true);
-        ((WebView)mTabHost.getCurrentView()).loadUrl(url);
+        ((WebView) mTabHost.getCurrentView()).getSettings().setUseWideViewPort(true);
+        ((WebView) mTabHost.getCurrentView()).getSettings().setLoadWithOverviewMode(true);
+        ((WebView) mTabHost.getCurrentView()).loadUrl(url);
     }
 }

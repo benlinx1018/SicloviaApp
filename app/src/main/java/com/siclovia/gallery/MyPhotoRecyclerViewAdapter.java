@@ -1,4 +1,4 @@
-package com.siclovia;
+package com.siclovia.gallery;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
+import com.siclovia.Photo;
+import com.siclovia.PhotoActivity;
+import com.siclovia.R;
+import com.siclovia.RouteActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

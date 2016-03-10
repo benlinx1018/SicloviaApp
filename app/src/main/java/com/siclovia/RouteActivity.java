@@ -491,9 +491,18 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void setMapOverLay(GoogleMap googleMap) {
+        //29.428326, -98.496938    <<>>  29.428326, -98.481562
+        //29.412755,-98.48925
+        //29.397184,
         googleMap.addGroundOverlay(new GroundOverlayOptions()
+                //0.50.58
+                //2200f
+                //29.412755, -98.48925
+
+                //29.419006, -98.492060
+                // 0.000915, -0.0016810
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                .position(new LatLng(29.43968, -98.4799), 2100));
+                .position(new LatLng(29.417648, -98.488375), 1950f));
     }
 
     private void callCameraIntent() {

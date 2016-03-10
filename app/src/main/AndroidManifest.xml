@@ -83,7 +83,7 @@
         <!-- TODO:Google Map Api Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AlzaSyD3SUbY_phx13coBmeKQc40qjEF_VUtlJk" />
+            android:value="AIzaSyBLWDJLUFLbd3rCrn3_tEMrIDmm9edq9G4" />
 
         <activity
             android:name=".PhotoActivity"

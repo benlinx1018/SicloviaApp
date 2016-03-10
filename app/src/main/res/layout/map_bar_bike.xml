@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/map_bar_parking_bg"
+        android:id="@+id/map_bar_bike_bg"
         android:layout_width="fill_parent"
         android:layout_height="135dp"
         android:layout_alignParentStart="true"
@@ -13,44 +13,43 @@
         android:src="@drawable/map_bar_parking" />
 
     <ImageView
-        android:id="@+id/map_bar_parking_icon"
+        android:id="@+id/map_bar_bike_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
-        android:src="@drawable/map_bar_parking_icon" />
+        android:src="@drawable/map_bar_bike_icon" />
 
     <TextView
-        android:id="@+id/map_bar_parking_icon_name"
+        android:id="@+id/map_bar_bike_icon_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/map_bar_parking_icon"
-        android:layout_below="@+id/map_bar_parking_icon"
+        android:layout_alignStart="@+id/map_bar_bike_icon"
+        android:layout_below="@+id/map_bar_bike_icon"
         android:layout_marginTop="50dp"
-        android:text="Parking"
+        android:text="B-Cycle\nStations"
         android:textColor="#000000"
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/map_bar_parking_info_title"
+        android:id="@+id/map_bar_bike_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/map_bar_parking_icon"
-        android:layout_alignTop="@+id/map_bar_parking_icon"
+        android:layout_alignLeft="@+id/map_bar_bike_icon"
+        android:layout_alignTop="@+id/map_bar_bike_icon"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="15dp"
-        android:text="Parking Locations"
+        android:text="B-Cycle Stations"
         android:textColor="#000000"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/map_bar_parking_info_name"
+        android:id="@+id/map_bike_info_name"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/map_bar_parking_info_title"
-        android:layout_alignTop="@+id/map_bar_parking_info_title"
+        android:layout_alignStart="@+id/map_bar_bike_info_title"
+        android:layout_alignTop="@+id/map_bar_bike_info_title"
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
         android:editable="true"
@@ -58,19 +57,4 @@
         android:text="Loading....."
         android:textColor="#000000"
         android:textSize="11sp" />
-
-    <TextView
-        android:id="@+id/map_bar_parking_info_road"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/map_bar_parking_info_title"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="30dp"
-        android:editable="true"
-        android:lineSpacingExtra="7dp"
-        android:text="Loading....."
-        android:textColor="#000000"
-        android:textSize="10sp"
-        android:textStyle="italic" />
 </RelativeLayout>

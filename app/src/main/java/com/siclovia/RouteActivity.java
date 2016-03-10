@@ -84,7 +84,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     private int share_selected = 0;
     private ShareDialog fbShareDialog;
     private Tracker mTracker;
-    private MenuItem infoOption, parkingOption;
+    private MenuItem bikeOption,infoOption, parkingOption;
 
     @Override
     public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
@@ -95,29 +95,22 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     public void onOtherButtonClick(ActionSheet actionSheet, int index) {
         if (index == 0) {
             callCameraIntent();
-
         } else if (index == 1) {
             callGalleryIntent();
         }
-
     }
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
     @Override
     protected void onPause() {
         super.onPause();
-
-
     }
 
     public class Markers {
         @SerializedName("markers")
         public List<Marker> markers;
-
         public Markers() {
             markers = new ArrayList<>();
         }
@@ -126,7 +119,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     public class Parkings {
         @SerializedName("parking")
         public List<Parking> parkings;
-
         public Parkings() {
             parkings = new ArrayList<>();
         }
@@ -173,7 +165,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         FacebookSdk.sdkInitialize(getApplicationContext());
         fbShareDialog = new ShareDialog(this);
 
-
         //建立new Fragment for google map
         mapFragment = SupportMapFragment.newInstance();
         //設定toolbar
@@ -185,9 +176,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawMenu, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-
         drawMenu.setDrawerListener(toggle);
-
 
         menuList = (ListView) findViewById(R.id.nav_lvMenu);
         SimpleAdapter adapter = new SimpleAdapter(this, getData(),
@@ -206,7 +195,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         };
         menuList.setAdapter(adapter);
         menuList.setOnItemClickListener(this);
-
 
         toggle.syncState();
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
@@ -284,14 +272,12 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Handle navigation view item clicks here.
-
-
-
         android.support.v4.app.FragmentManager sfm = getSupportFragmentManager();
         if (mapFragment.isAdded()) {
             sfm.beginTransaction().hide(mapFragment).commit();
         }
 
+        bikeOption.setVisible(position == 2);
         infoOption.setVisible(position == 2);
         parkingOption.setVisible(position == 2);
 
@@ -349,6 +335,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.route, menu);
+        bikeOption = menu.findItem(R.id.action_bike);
         infoOption = menu.findItem(R.id.action_info);
         parkingOption = menu.findItem(R.id.action_parking);
         return true;
@@ -367,6 +354,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_bike) {
+            View menuItemView = findViewById(R.id.action_bike);
+            showBikeMenu(menuItemView);
+        }
         if (id == R.id.action_info) {
             View menuItemView = findViewById(R.id.action_info);
             showInfoMenu(menuItemView);
@@ -429,10 +420,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     break;
                                 case 3:
                                     googleMap.addMarker(new MarkerOptions()
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_stoppoint))
-                                            .title(obj.name)
-                                            .snippet(obj.subTitle)
-                                            .position(new LatLng(latitude, longitude)));
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_stoppoint))
+                                        .title(obj.name)
+                                        .snippet(obj.subTitle)
+                                        .position(new LatLng(latitude, longitude)));
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
@@ -472,6 +463,31 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                     }
                 }
         );
+        AsyncHttpClient clientforbike = new AsyncHttpClient();
+        clientforbike.get("http://joinymca.org/siclovia/json/bike.php", new TextHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String res) {
+                        Gson gson = new GsonBuilder().create();
+                        Parkings parkingsObj = gson.fromJson(res, Parkings.class);
+
+                        for (Parking obj : parkingsObj.parkings) {
+                            String[] latlong = obj.location.substring(1, obj.location.length() - 1).split(",");
+                            double latitude = Double.parseDouble(latlong[0]);
+                            double longitude = Double.parseDouble(latlong[1]);
+                            googleMap.addMarker(new MarkerOptions()
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_bikeparking))
+                                    .title(obj.name)
+                                    .snippet(obj.subTitle)
+                                    .position(new LatLng(latitude, longitude)));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                    }
+                }
+        );
     }
 
     public void setMapOverLay(GoogleMap googleMap) {
@@ -495,6 +511,46 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         startActivityForResult(i, GET_FROM_FILE);
     }
 
+    private Parkings bikesObj=null;
+    private void showBikeMenu(View view) {
+        final PopupWindow showPopup = PopupHelper
+                .newBasicPopupWindow(getApplicationContext());
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.map_bar_bike, null);
+        showPopup.setContentView(popupView);
+        if(bikesObj==null) {
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get("http://www.joinymca.org/siclovia/json/bike.php", new TextHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String res) {
+                            Gson gson = new GsonBuilder().create();
+                            Parkings bikesObj = gson.fromJson(res, Parkings.class);
+                            String tmpName = "";
+                            for (Parking obj : bikesObj.parkings) {
+                                tmpName += obj.name + '\n';
+                            }
+                            ((TextView) showPopup.getContentView().findViewById(R.id.map_bike_info_name)).setText(tmpName);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                            // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                        }
+                    }
+            );
+        }else{
+            String tmpName = "";
+            for (Parking obj : bikesObj.parkings) {
+                tmpName += obj.name + '\n';
+            }
+            ((TextView) showPopup.getContentView().findViewById(R.id.map_bike_info_name)).setText(tmpName);
+        }
+        showPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
+        showPopup.showAsDropDown(view);
+    }
+
     private void showInfoMenu(View view) {
         PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
@@ -506,6 +562,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
+
     private Parkings parkingsObj=null;
     private void showParkingMenu(View view) {
         final PopupWindow showPopup = PopupHelper
@@ -537,9 +594,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                         }
                     }
             );
-        }
-        else
-        {
+        }else{
             String tmpName = "";
             String tmpRoad = "";
             for (Parking obj : parkingsObj.parkings) {

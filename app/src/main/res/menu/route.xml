@@ -3,14 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.siclovia.RouteActivity">
     <item
+        android:id="@+id/action_bike"
+        android:icon="@drawable/appbar_bikeicon"
+        android:title="BikeIcon"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_info"
         android:icon="@drawable/appbar_infoicon"
         android:title="InfoIcon"
-
         app:showAsAction="always" />
     <item
         android:id="@+id/action_parking"
-
         android:icon="@drawable/appbar_parkingicon"
         android:title="ParkingIcon"
         app:showAsAction="always" />

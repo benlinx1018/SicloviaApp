@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".PhotoActivity">
+    tools:context=".gallery.PhotoActivity">
     <ProgressBar
         android:id="@+id/progress_bar"
         style="@android:style/Widget.Holo.Light.ProgressBar.Small"

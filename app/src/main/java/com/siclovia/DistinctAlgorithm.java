@@ -88,7 +88,11 @@ public class DistinctAlgorithm <T extends AppClusterItem> implements Algorithm<T
                     continue;
                 }
 
-                Bounds searchBounds = createBoundsFromSpan(candidate.getPoint(), zoomSpecificSpan);
+                double mzoomSpecificSpan = 0;
+                if (discreteZoom <= 14) {
+                    mzoomSpecificSpan = zoomSpecificSpan;
+                }
+                Bounds searchBounds = createBoundsFromSpan(candidate.getPoint(), mzoomSpecificSpan);
                 Collection<QuadItem<T>> clusterItems;
                 clusterItems = mQuadTree.search(searchBounds);
                 if (clusterItems.size() == 1) {

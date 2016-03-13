@@ -381,7 +381,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         //Set{29.438882, -98.478024}
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.438882, -98.478024), 14));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.417450, -98.488169), 14));
         setMapOverLay(googleMap);
         //MARKER
         AsyncHttpClient client = new AsyncHttpClient();
@@ -513,7 +513,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 //29.419006, -98.492060
                 // 0.000915, -0.0016810
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                .position(new LatLng(29.417648, -98.488375), 1950f));
+                .position(new LatLng(29.417515, -98.488255), 1950f));
     }
 
     private void callCameraIntent() {

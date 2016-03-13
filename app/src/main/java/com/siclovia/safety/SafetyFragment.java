@@ -1,4 +1,4 @@
-package com;
+package com.siclovia.safety;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.Utilities;
 import com.siclovia.R;
 
 

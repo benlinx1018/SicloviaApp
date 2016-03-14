@@ -19,11 +19,40 @@
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="14dp"
-                android:src="@drawable/siclovia" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/appbar_ivBike"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="0dp"
+                    android:padding="4dp"
+                    android:src="@drawable/appbar_bikeicon" />
+
+                <ImageView
+                    android:id="@+id/appbar_ivPark"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_toEndOf="@id/appbar_ivBike"
+                    android:padding="4dp"
+                    android:src="@drawable/appbar_parkingicon" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:paddingBottom="2dp"
+                    android:src="@drawable/siclovia" />
+
+                <ImageView
+                    android:id="@+id/appbar_ivInfo"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentEnd="true"
+                    android:padding="4dp"
+                    android:src="@drawable/appbar_infoicon" />
+            </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 

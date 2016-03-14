@@ -89,7 +89,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     private int share_selected = 0;
     private ShareDialog fbShareDialog;
     private Tracker mTracker;
-    private MenuItem bikeOption,infoOption, parkingOption;
+    private ImageView bikeOption,infoOption, parkingOption;
 
     @Override
     public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
@@ -175,7 +175,28 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         //設定toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        bikeOption = (ImageView) toolbar.findViewById(R.id.appbar_ivBike);
+        bikeOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBikeMenu(v);
+            }
+        });
+        parkingOption = (ImageView) toolbar.findViewById(R.id.appbar_ivPark);
+        parkingOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showParkingMenu(v);
+            }
+        });
 
+        infoOption = (ImageView) toolbar.findViewById(R.id.appbar_ivInfo);
+        infoOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInfoMenu(v);
+            }
+        });
         //建立選單
         drawMenu = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -202,8 +223,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         menuList.setOnItemClickListener(this);
 
         toggle.syncState();
+        //Get GA
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+        //add GA Tracker event
         mTracker = analytics.newTracker(getString(R.string.ga_trackingId));
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory("siclovia")
@@ -282,9 +304,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             sfm.beginTransaction().hide(mapFragment).commit();
         }
 
-        bikeOption.setVisible(position == 2);
-        infoOption.setVisible(position == 2);
-        parkingOption.setVisible(position == 2);
+        bikeOption.setVisibility(position == 2 ? View.VISIBLE : View.INVISIBLE);
+        infoOption.setVisibility(position == 2 ? View.VISIBLE : View.INVISIBLE);
+        parkingOption.setVisibility(position == 2 ? View.VISIBLE : View.INVISIBLE);
 
         Fragment fragment = null;
         switch (position) {
@@ -340,9 +362,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.route, menu);
-        bikeOption = menu.findItem(R.id.action_bike);
-        infoOption = menu.findItem(R.id.action_info);
-        parkingOption = menu.findItem(R.id.action_parking);
+
         return true;
     }
 
@@ -354,23 +374,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
      **/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_bike) {
-            View menuItemView = findViewById(R.id.action_bike);
-            showBikeMenu(menuItemView);
-        }
-        if (id == R.id.action_info) {
-            View menuItemView = findViewById(R.id.action_info);
-            showInfoMenu(menuItemView);
-        }
-        if (id == R.id.action_parking) {
-            View menuItemView = findViewById(R.id.action_parking);
-            showParkingMenu(menuItemView);
-        }
+
         if (id == R.id.action_option_icon) {
             View menuItemView = findViewById(R.id.action_option_icon);
             showShareMenu(menuItemView);

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -77,6 +78,14 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layoutView = inflater.inflate(R.layout.fragment_photo_list, container, false);
+        ImageView ivFb =(ImageView)layoutView.findViewById(R.id.fb);
+
+
+        ImageView ivTW =(ImageView)layoutView.findViewById(R.id.tw);
+        ImageView ivIG =(ImageView)layoutView.findViewById(R.id.ig);
+
+
+
         View view = layoutView.findViewById(R.id.gallery_list);
 
         if (view instanceof RecyclerView) {

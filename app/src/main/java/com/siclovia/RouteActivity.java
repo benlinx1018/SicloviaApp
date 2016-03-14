@@ -646,11 +646,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onClick(View v) {
                 share_selected = v.getId();
-                ActionSheet.createBuilder(v.getContext(), getSupportFragmentManager())
-                        .setCancelButtonTitle("Cancel Button")
-                        .setOtherButtonTitles("Take Photo", "Choose Photo")
-                        .setCancelableOnTouchOutside(true)
-                        .setListener(RouteActivity.this).setListener(RouteActivity.this).show();
+                showActionSheet(v);
             }
         };
         popupView.findViewById(R.id.option_share_fb).setOnClickListener(shareEvent);
@@ -663,7 +659,13 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
-
+    public void showActionSheet(View v){
+        ActionSheet.createBuilder(v.getContext(), getSupportFragmentManager())
+                .setCancelButtonTitle("Cancel Button")
+                .setOtherButtonTitles("Take Photo", "Choose Photo")
+                .setCancelableOnTouchOutside(true)
+                .setListener(RouteActivity.this).setListener(RouteActivity.this).show();
+    }
     private void shareToFb(Uri link) {
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
@@ -829,5 +831,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         }
         dialog.hide();
     }
-
+    public void setShare_selected(int selected){
+        this.share_selected=selected;
+    }
 }

@@ -16,6 +16,7 @@ import com.google.gson.annotations.SerializedName;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.siclovia.R;
+import com.siclovia.RouteActivity;
 
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        photoAdapter = new MyPhotoRecyclerViewAdapter(getActivity().getBaseContext(),photos);
+        photoAdapter = new MyPhotoRecyclerViewAdapter(getActivity().getBaseContext(), photos);
         //get all sponsors
         new AsyncHttpClient().get("http://joinymca.org/siclovia/json/gallery.php", new TextHttpResponseHandler() {
                     @Override
@@ -78,12 +79,31 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layoutView = inflater.inflate(R.layout.fragment_photo_list, container, false);
-        ImageView ivFb =(ImageView)layoutView.findViewById(R.id.fb);
+        ImageView ivFb = (ImageView) layoutView.findViewById(R.id.fb);
+        ivFb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((RouteActivity)getActivity()).setShare_selected(R.id.option_share_fb);
+                ((RouteActivity)getActivity()).showActionSheet(v);
+            }
+        });
 
-
-        ImageView ivTW =(ImageView)layoutView.findViewById(R.id.tw);
-        ImageView ivIG =(ImageView)layoutView.findViewById(R.id.ig);
-
+        ImageView ivTW = (ImageView) layoutView.findViewById(R.id.tw);
+        ivTW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((RouteActivity)getActivity()).setShare_selected(R.id.option_share_tw);
+                ((RouteActivity)getActivity()).showActionSheet(v);
+            }
+        });
+        ImageView ivIG = (ImageView) layoutView.findViewById(R.id.ig);
+        ivIG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((RouteActivity)getActivity()).setShare_selected(R.id.option_share_ig);
+                ((RouteActivity)getActivity()).showActionSheet(v);
+            }
+        });
 
 
         View view = layoutView.findViewById(R.id.gallery_list);
@@ -97,8 +117,6 @@ public class GalleryFragment extends Fragment {
         }
         return layoutView;
     }
-
-
 
 
 }

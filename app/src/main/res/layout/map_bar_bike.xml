@@ -52,7 +52,7 @@
         android:layout_alignBottom="@+id/map_bar_bike_icon_name"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/map_bar_bike_info_title"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/map_bike_info_name"
@@ -61,7 +61,7 @@
             android:layout_alignStart="@+id/map_bar_bike_info_title"
             android:layout_alignTop="@+id/map_bar_bike_info_title"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:editable="true"
             android:lineSpacingExtra="6dp"
             android:text="Loading.....\nLoading.....\nLoading.....\nLoading.....\nLoading.....\nLoading.....\nLoading.....\nLoading.....\n"

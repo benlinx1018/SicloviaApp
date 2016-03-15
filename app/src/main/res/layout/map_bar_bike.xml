@@ -48,10 +48,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_alignTop="@+id/map_bar_bike_info_title"
         android:layout_alignStart="@+id/map_bar_bike_info_title"
         android:layout_alignBottom="@+id/map_bar_bike_icon_name"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/map_bar_bike_info_title"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/map_bike_info_name"

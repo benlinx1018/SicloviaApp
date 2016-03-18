@@ -73,4 +73,19 @@
         android:textColor="#000000"
         android:textSize="10sp"
         android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/map_bar_parking_info_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/map_bar_parking_info_title"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="100dp"
+        android:editable="true"
+        android:lineSpacingExtra="7dp"
+        android:text="Downtown meters are free"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:textStyle="italic" />
 </RelativeLayout>

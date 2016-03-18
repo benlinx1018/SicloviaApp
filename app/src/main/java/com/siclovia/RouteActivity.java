@@ -77,7 +77,6 @@ import com.siclovia.schedule.ScheduleFragment;
 import com.siclovia.social.FeedFragment;
 import com.siclovia.sponser.SponsorFragment;
 
-
 import cz.msebera.android.httpclient.Header;
 
 public class RouteActivity extends AppCompatActivity implements OnMapReadyCallback, ListView.OnItemClickListener, ActionSheet.ActionSheetListener {
@@ -387,7 +386,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         //Set{29.438882, -98.478024}
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(29.417450, -98.488169), 14));
         setMapOverLay(googleMap);
         //MARKER
         AsyncHttpClient client = new AsyncHttpClient();
@@ -412,7 +410,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             String[] latlong = obj.location.substring(1, obj.location.length() - 1).split(",");
 
 
-
                             double latitude = Double.parseDouble(latlong[0]);
                             double longitude = Double.parseDouble(latlong[1]);
 
@@ -434,17 +431,17 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                                     break;
                                 case 3:
                                     googleMap.addMarker(new MarkerOptions()
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_stoppoint))
-                                        .title(obj.name)
-                                        .snippet(obj.subTitle)
-                                        .position(new LatLng(latitude, longitude)));
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_stoppoint))
+                                            .title(obj.name)
+                                            .snippet(obj.subTitle)
+                                            .position(new LatLng(latitude, longitude)));
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_stoppoint, obj.name, obj.subTitle));
                                     break;
                                 case 4:
                                     //mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_reclovia, obj.name, obj.subTitle));
 
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude + 0.0005, R.drawable.map_icon_water, obj.name, obj.subTitle));
-                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude , R.drawable.map_icon_hell, obj.name, obj.subTitle));
+                                    mClusterManager.addItem(new AppClusterItem(latitude, longitude, R.drawable.map_icon_hell, obj.name, obj.subTitle));
                                     mClusterManager.addItem(new AppClusterItem(latitude, longitude - 0.0005, R.drawable.map_icon_restroom, obj.name, obj.subTitle));
 
                                     break;
@@ -507,19 +504,52 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         );
     }
 
-    public void setMapOverLay(GoogleMap googleMap) {
-        //29.428326, -98.496938    <<>>  29.428326, -98.481562
-        //29.412755,-98.48925
-        //29.397184,
-        googleMap.addGroundOverlay(new GroundOverlayOptions()
-                //0.50.58
-                //2200f
-                //29.412755, -98.48925
+    private MapOverLay presetObj=null;
+    public void setMapOverLay(final GoogleMap googleMap) {
+        if(presetObj==null) {
+            AsyncHttpClient Syncmap = new AsyncHttpClient();
+            Syncmap.get("http://joinymca.org/siclovia/json/preset.php", new TextHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String res) {
+                            Gson gson = new GsonBuilder().create();
+                            MapOverLay presetObj = gson.fromJson(res, MapOverLay.class);
 
-                //29.419006, -98.492060
-                // 0.000915, -0.0016810
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                .position(new LatLng(29.417515, -98.488255), 1950f));
+                            String[] load_latlong = presetObj.android_map.load_center.substring(1, presetObj.android_map.map_center.length() - 1).split(",");
+                            double load_latitude = Double.parseDouble(load_latlong[0]);
+                            double load_longitude = Double.parseDouble(load_latlong[1]);
+                            String[] latlong = presetObj.android_map.map_center.substring(1, presetObj.android_map.map_center.length() - 1).split(",");
+                            double latitude = Double.parseDouble(latlong[0]);
+                            double longitude = Double.parseDouble(latlong[1]);
+
+
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(load_latitude, load_longitude), 14));
+                            googleMap.addGroundOverlay(new GroundOverlayOptions()
+                                    .bearing(presetObj.android_map.rotate)
+                                    .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
+                                    .position(new LatLng(latitude, -longitude), presetObj.android_map.width));
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String res, Throwable t) {
+                            // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                        }
+                    }
+            );
+        }else{
+            String[] load_latlong = presetObj.android_map.load_center.substring(1, presetObj.android_map.map_center.length() - 1).split(",");
+            double load_latitude = Double.parseDouble(load_latlong[0]);
+            double load_longitude = Double.parseDouble(load_latlong[1]);
+            String[] latlong = presetObj.android_map.map_center.substring(1, presetObj.android_map.map_center.length() - 1).split(",");
+            double latitude = Double.parseDouble(latlong[0]);
+            double longitude = Double.parseDouble(latlong[1]);
+
+
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(load_latitude, load_longitude), 14));
+            googleMap.addGroundOverlay(new GroundOverlayOptions()
+                    .bearing(presetObj.android_map.rotate)
+                    .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
+                    .position(new LatLng(latitude, -longitude), presetObj.android_map.width));
+        }
     }
 
     private void callCameraIntent() {

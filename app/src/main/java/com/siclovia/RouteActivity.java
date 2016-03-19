@@ -514,19 +514,22 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             Gson gson = new GsonBuilder().create();
                             MapOverLay presetObj = gson.fromJson(res, MapOverLay.class);
 
-                            String[] load_latlong = presetObj.android_map.load_center.substring(1, presetObj.android_map.map_center.length() - 1).split(",");
+                            String[] load_latlong = presetObj.android_map.load_center.substring(0, presetObj.android_map.map_center.length() - 1).split(",");
                             double load_latitude = Double.parseDouble(load_latlong[0]);
                             double load_longitude = Double.parseDouble(load_latlong[1]);
-                            String[] latlong = presetObj.android_map.map_center.substring(1, presetObj.android_map.map_center.length() - 1).split(",");
+                            String[] latlong = presetObj.android_map.map_center.substring(0, presetObj.android_map.map_center.length() - 1).split(",");
                             double latitude = Double.parseDouble(latlong[0]);
                             double longitude = Double.parseDouble(latlong[1]);
 
 
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(load_latitude, load_longitude), 14));
+
+                            float with = Float.parseFloat(presetObj.android_map.width.substring(0, presetObj.android_map.width.length() - 2));
+                            //TODO:add rotate
                             googleMap.addGroundOverlay(new GroundOverlayOptions()
-                                    .bearing(presetObj.android_map.rotate)
+                                    .bearing(0)
                                     .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                                    .position(new LatLng(latitude, -longitude), presetObj.android_map.width));
+                                    .position(new LatLng(latitude, -longitude), with));
                         }
 
                         @Override
@@ -546,9 +549,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(load_latitude, load_longitude), 14));
             googleMap.addGroundOverlay(new GroundOverlayOptions()
-                    .bearing(presetObj.android_map.rotate)
+                    .bearing(Float.parseFloat(presetObj.android_map.rotate))
                     .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                    .position(new LatLng(latitude, -longitude), presetObj.android_map.width));
+                    .position(new LatLng(latitude, -longitude), Float.parseFloat(presetObj.android_map.width.substring(0, presetObj.android_map.width.length() - 2))));
         }
     }
 

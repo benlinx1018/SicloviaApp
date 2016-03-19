@@ -11,7 +11,7 @@ public class MapOverLay {
     @SerializedName("map_image")
     public String map_image;
     @SerializedName("date")
-    public Date date;
+    public String date;
 
     public android_map android_map;
     public ios_map ios_map;
@@ -32,8 +32,8 @@ public class MapOverLay {
         @SerializedName("load_center")
         public String load_center;
         @SerializedName("width")
-        public Float width;
+        public String width;
         @SerializedName("rotate")
-        public float rotate;
+        public String rotate;
     }
 }

@@ -13,7 +13,9 @@ public class MapOverLay {
     @SerializedName("date")
     public Date date;
 
-    public static class ios_map{
+    public android_map android_map;
+    public ios_map ios_map;
+    public class ios_map{
         @SerializedName("map_center")
         public String map_center;
         @SerializedName("load_center")
@@ -24,7 +26,7 @@ public class MapOverLay {
         public String bottom_left;
     }
 
-    public static class android_map{
+    public class android_map{
         @SerializedName("map_center")
         public String map_center;
         @SerializedName("load_center")

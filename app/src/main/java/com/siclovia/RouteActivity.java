@@ -519,12 +519,12 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(load_latitude, load_longitude), 14));
 
-                            float with = Float.parseFloat(presetObj.android_map.width.substring(0, presetObj.android_map.width.length() - 2));
+                            float width = Float.parseFloat(presetObj.android_map.width.substring(0, presetObj.android_map.width.length() - 1));
                             //TODO:add rotate
                             googleMap.addGroundOverlay(new GroundOverlayOptions()
                                     .bearing(0)
                                     .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                                    .position(new LatLng(latitude, longitude), with));
+                                    .position(new LatLng(latitude, longitude), width));
                         }
 
                         @Override

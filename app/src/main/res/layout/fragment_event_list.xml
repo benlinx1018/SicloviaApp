@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:paddingTop="8dp"
+        android:paddingTop="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:src="@drawable/event_title" />
@@ -18,9 +18,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/schedule_subTitle"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="2dp"
         android:text=""
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="38sp" />
     <com.components.swipemenulistview.SwipeMenuListView
         android:id="@+id/schedule_list"
         android:layout_width="match_parent"

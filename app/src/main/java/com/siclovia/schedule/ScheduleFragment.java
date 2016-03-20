@@ -36,9 +36,10 @@ import java.util.List;
 
 
 public class ScheduleFragment extends Fragment {
+    private static final String ARG_DATE = "date";
     EventAdapter eventAdapter = new EventAdapter();
     public List<Event> events = new ArrayList<>();
-
+    private String subTitle;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -49,8 +50,9 @@ public class ScheduleFragment extends Fragment {
 
     public static ScheduleFragment newInstance(String date) {
         ScheduleFragment fragment = new ScheduleFragment();
-
-
+        Bundle args = new Bundle();
+        args.putString(ARG_DATE, date);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -59,6 +61,12 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            subTitle= getArguments().getString(ARG_DATE);
+
+        }
+
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://joinymca.org/siclovia/json/events.php", new TextHttpResponseHandler() {
                     @Override
@@ -82,6 +90,8 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_list, container, false);
+        TextView tvSubTitle = (TextView)  view.findViewById(R.id.schedule_subTitle);
+        tvSubTitle.setText(subTitle);
 
 
         SwipeMenuListView listView = (SwipeMenuListView) view.findViewById(R.id.schedule_list);
@@ -189,6 +199,11 @@ public class ScheduleFragment extends Fragment {
             final Event item = getItem(position);
 
             holder.txtTime.setText(item.time);
+            if(item.time.contains(":"))
+
+                holder.txtTime.setTextSize(24);
+            else
+                holder.txtTime.setTextSize(32);
             holder.txtAmpm.setText(item.ampm);
             holder.txtTitle.setText(item.title);
             holder.txtSubTitle.setText(item.subTitle);

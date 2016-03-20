@@ -14,10 +14,10 @@
     <TextView
         android:id="@+id/nav_menu_item_tvName"
         android:layout_width="wrap_content"
-
+android:layout_marginLeft="10dp"
         android:layout_height="wrap_content"
         android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <LinearLayout
         android:layout_width="fill_parent"

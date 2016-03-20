@@ -10,6 +10,7 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -90,7 +91,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     private Tracker mTracker;
     private ImageView bikeOption,infoOption, parkingOption;
     private TextView txtNavDate;
-
+    private Typeface tfHelvetica;
     @Override
     public void onOtherButtonClick(ActionSheet actionSheet, int index) {
         if (index == 0) {
@@ -191,7 +192,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
         drawMenu.setDrawerListener(toggle);
         txtNavDate =  (TextView)findViewById(R.id.nav_txtActDate);
-
+        tfHelvetica = Typeface.createFromAsset(getAssets(), "fonts/helvetica.ttf");
         menuList = (ListView) findViewById(R.id.nav_lvMenu);
         SimpleAdapter adapter = new SimpleAdapter(this, getData(),
                 R.layout.nav_menu_item, new String[]{"img", "title", "info"},
@@ -202,6 +203,8 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 int colorPos = position % colors.length;
+                TextView tvfunName = (TextView) view.findViewById(R.id.nav_menu_item_tvName);
+                tvfunName.setTypeface(tfHelvetica);
                 ImageView ivSlideBar = (ImageView) view.findViewById(R.id.nav_menu_item_ivSidebar);
                 ivSlideBar.setBackgroundColor(colors[colorPos]);
                 return view;

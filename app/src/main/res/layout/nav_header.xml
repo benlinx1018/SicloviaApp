@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="10dp"
-    android:paddingLeft="60dp"
-    android:paddingRight="60dp"
-    android:paddingTop="5px"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    android:paddingTop="5px">
 
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:src="@drawable/menu_title" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
         android:id="@+id/nav_txtActDate"
         android:text=""
         android:textColor="#565656"

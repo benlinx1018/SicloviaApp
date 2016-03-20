@@ -89,11 +89,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     private ShareDialog fbShareDialog;
     private Tracker mTracker;
     private ImageView bikeOption,infoOption, parkingOption;
-
-    @Override
-    public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
-
-    }
+    private TextView txtNavDate;
 
     @Override
     public void onOtherButtonClick(ActionSheet actionSheet, int index) {
@@ -102,14 +98,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         } else if (index == 1) {
             callGalleryIntent();
         }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     public class Markers {
@@ -202,6 +190,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 this, drawMenu, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawMenu.setDrawerListener(toggle);
+        txtNavDate =  (TextView)findViewById(R.id.nav_txtActDate);
 
         menuList = (ListView) findViewById(R.id.nav_lvMenu);
         SimpleAdapter adapter = new SimpleAdapter(this, getData(),
@@ -314,7 +303,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 drawMenu.setBackgroundResource(R.drawable.sponsor_bg);
                 break;
             case 1:
-                fragment = ScheduleFragment.newInstance();
+                fragment = ScheduleFragment.newInstance(presetObj.date);
                 drawMenu.setBackgroundResource(R.drawable.event_bg);
                 break;
             case 2:
@@ -385,9 +374,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        //Set{29.438882, -98.478024}
+
         setMapOverLay(googleMap);
-        //MARKER
+
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://joinymca.org/siclovia/json/markers.php", new TextHttpResponseHandler() {
                     @Override
@@ -504,7 +493,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         );
     }
 
-    private MapOverLay presetObj=null;
+    private PresetData presetObj=null;
     public void setMapOverLay(final GoogleMap googleMap) {
         if(presetObj==null) {
             AsyncHttpClient Syncmap = new AsyncHttpClient();
@@ -512,7 +501,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String res) {
                             Gson gson = new GsonBuilder().create();
-                            MapOverLay presetObj = gson.fromJson(res, MapOverLay.class);
+                            presetObj = gson.fromJson(res, PresetData.class);
+
+
+                            txtNavDate.setText(presetObj.date);
 
                             String[] load_latlong = presetObj.android_map.load_center.substring(0, presetObj.android_map.map_center.length() - 1).split(",");
                             double load_latitude = Double.parseDouble(load_latlong[0]);
@@ -529,7 +521,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             googleMap.addGroundOverlay(new GroundOverlayOptions()
                                     .bearing(0)
                                     .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                                    .position(new LatLng(latitude, -longitude), with));
+                                    .position(new LatLng(latitude, longitude), with));
                         }
 
                         @Override
@@ -551,7 +543,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
             googleMap.addGroundOverlay(new GroundOverlayOptions()
                     .bearing(Float.parseFloat(presetObj.android_map.rotate))
                     .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                    .position(new LatLng(latitude, -longitude), Float.parseFloat(presetObj.android_map.width.substring(0, presetObj.android_map.width.length() - 2))));
+                    .position(new LatLng(latitude, longitude), Float.parseFloat(presetObj.android_map.width.substring(0, presetObj.android_map.width.length() - 2))));
         }
     }
 
@@ -583,7 +575,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String res) {
                             Gson gson = new GsonBuilder().create();
-                            Parkings bikesObj = gson.fromJson(res, Parkings.class);
+                             bikesObj = gson.fromJson(res, Parkings.class);
                             String tmpName = "";
                             for (Parking obj : bikesObj.parkings) {
                                 tmpName += obj.name + '\n';
@@ -609,19 +601,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
-
-    private void showInfoMenu(View view) {
-        PopupWindow showPopup = PopupHelper
-                .newBasicPopupWindow(getApplicationContext());
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.map_info, null);
-        showPopup.setContentView(popupView);
-        showPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
-        showPopup.showAsDropDown(view);
-    }
-
     private Parkings parkingsObj=null;
     private void showParkingMenu(View view) {
         final PopupWindow showPopup = PopupHelper
@@ -669,6 +648,20 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.showAsDropDown(view);
     }
 
+    private void showInfoMenu(View view) {
+        PopupWindow showPopup = PopupHelper
+                .newBasicPopupWindow(getApplicationContext());
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.map_info, null);
+        showPopup.setContentView(popupView);
+        showPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        showPopup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
+        showPopup.showAsDropDown(view);
+    }
+
+
+
     private void showShareMenu(View view) {
         PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
@@ -699,6 +692,11 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 .setCancelableOnTouchOutside(true)
                 .setListener(RouteActivity.this).setListener(RouteActivity.this).show();
     }
+    @Override
+    public void onDismiss(ActionSheet actionSheet, boolean isCancle) {
+
+    }
+
     private void shareToFb(Uri link) {
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()

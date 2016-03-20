@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by PSG-RDAA on 2016/3/18.
  */
-public class MapOverLay {
+public class PresetData {
     @SerializedName("map_image")
     public String map_image;
     @SerializedName("date")

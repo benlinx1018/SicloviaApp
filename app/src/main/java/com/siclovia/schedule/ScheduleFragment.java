@@ -47,8 +47,10 @@ public class ScheduleFragment extends Fragment {
     public ScheduleFragment() {
     }
 
-    public static ScheduleFragment newInstance() {
+    public static ScheduleFragment newInstance(String date) {
         ScheduleFragment fragment = new ScheduleFragment();
+
+
         return fragment;
     }
 
@@ -82,7 +84,7 @@ public class ScheduleFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_event_list, container, false);
 
 
-        SwipeMenuListView listView = (SwipeMenuListView) view.findViewById(R.id.schedult_list);
+        SwipeMenuListView listView = (SwipeMenuListView) view.findViewById(R.id.schedule_list);
         listView.setAdapter(eventAdapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 

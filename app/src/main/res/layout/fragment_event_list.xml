@@ -9,11 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:padding="10dp"
+        android:paddingTop="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:src="@drawable/event_title" />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/schedule_subTitle"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
     <com.components.swipemenulistview.SwipeMenuListView
-        android:id="@+id/schedult_list"
+        android:id="@+id/schedule_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp" />

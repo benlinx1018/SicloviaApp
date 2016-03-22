@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -77,6 +78,8 @@ import com.siclovia.safety.SafetyFragment;
 import com.siclovia.schedule.ScheduleFragment;
 import com.siclovia.social.FeedFragment;
 import com.siclovia.sponser.SponsorFragment;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -509,22 +512,43 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
 
                             txtNavDate.setText(presetObj.date);
 
-                            String[] load_latlong = presetObj.android_map.load_center.substring(0, presetObj.android_map.map_center.length() - 1).split(",");
+                            String[] load_latlong = presetObj.android_map.load_center.split(",");
                             double load_latitude = Double.parseDouble(load_latlong[0]);
                             double load_longitude = Double.parseDouble(load_latlong[1]);
-                            String[] latlong = presetObj.android_map.map_center.substring(0, presetObj.android_map.map_center.length() - 1).split(",");
-                            double latitude = Double.parseDouble(latlong[0]);
-                            double longitude = Double.parseDouble(latlong[1]);
-
+                            String[] latlong = presetObj.android_map.map_center.split(",");
+                            final double latitude = Double.parseDouble(latlong[0]);
+                            final double longitude = Double.parseDouble(latlong[1]);
 
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(load_latitude, load_longitude), 14));
 
-                            float with = Float.parseFloat(presetObj.android_map.width.substring(0, presetObj.android_map.width.length() - 2));
-                            //TODO:add rotate
+                            final float with = Float.parseFloat(presetObj.android_map.width);
                             googleMap.addGroundOverlay(new GroundOverlayOptions()
-                                    .bearing(0)
+                                    .bearing(Float.parseFloat(presetObj.android_map.rotate))
                                     .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
                                     .position(new LatLng(latitude, longitude), with));
+
+                            Picasso.with(getApplicationContext())
+                                    .load("http://joinymca.org/siclovia/images/"+presetObj.map_image)
+                                    .into(new Target() {
+                                        @Override
+                                        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                                            //Set it in the ImageView
+                                            googleMap.addGroundOverlay(new GroundOverlayOptions()
+                                                    .bearing(Float.parseFloat(presetObj.android_map.rotate))
+                                                    .image(BitmapDescriptorFactory.fromBitmap(bitmap))
+                                                    .position(new LatLng(latitude, longitude), with));
+                                        }
+                                        @Override
+                                        public void onBitmapFailed(Drawable errorDrawable) {
+
+                                        }
+                                        @Override
+                                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                        }
+
+                                    });
+
                         }
 
                         @Override

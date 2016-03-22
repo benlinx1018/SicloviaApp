@@ -522,10 +522,10 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(load_latitude, load_longitude), 14));
 
                             final float with = Float.parseFloat(presetObj.android_map.width);
-                            googleMap.addGroundOverlay(new GroundOverlayOptions()
-                                    .bearing(Float.parseFloat(presetObj.android_map.rotate))
-                                    .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
-                                    .position(new LatLng(latitude, longitude), with));
+//                            googleMap.addGroundOverlay(new GroundOverlayOptions()
+//                                    .bearing(Float.parseFloat(presetObj.android_map.rotate))
+//                                    .image(BitmapDescriptorFactory.fromResource(R.drawable.map_overlay))
+//                                    .position(new LatLng(latitude, longitude), with));
 
                             Picasso.with(getApplicationContext())
                                     .load("http://joinymca.org/siclovia/images/"+presetObj.map_image)

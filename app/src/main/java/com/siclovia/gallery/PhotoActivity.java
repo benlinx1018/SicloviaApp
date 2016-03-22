@@ -1,5 +1,6 @@
 package com.siclovia.gallery;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,6 +25,7 @@ public class PhotoActivity extends AppCompatActivity {
     private boolean isSaved =false;
     private String newUri;
     private Target t;
+    private ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,8 @@ public class PhotoActivity extends AppCompatActivity {
                     Toast.makeText(PhotoActivity.this, "Has been downloaded", Toast.LENGTH_SHORT).show();
                 }
                 else {
-
+                    dialog = ProgressDialog.show(PhotoActivity.this,
+                            "", "Downloading Image.....", true);
                     Picasso.with(getBaseContext()).load(uri).into(t);
                 }
             }
@@ -85,13 +88,14 @@ public class PhotoActivity extends AppCompatActivity {
         @Override
         public void onBitmapLoaded (Bitmap bitmap, Picasso.LoadedFrom arg1)
         {
-
+            dialog.dismiss();
             ContentResolver r = resolver.get();
             if (r != null)
             {
                 newUri= MediaStore.Images.Media.insertImage(r, bitmap, name, desc);
 
                 if(newUri!=null) {
+
                     Toast.makeText(context, "Download complete!!", Toast.LENGTH_SHORT).show();
                     isSaved = true;
                 }

@@ -42,7 +42,7 @@
         <!-- TODO:Google Map Api Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDsuHBp4KAC7IyyPaWbEFUbdiFxcY1zeYo" />
+            android:value="AIzaSyAkD_V2wBt7rk1g5R1NE3punqPRP3T9s1k" />
 
         <activity
             android:name=".SplashActivity"

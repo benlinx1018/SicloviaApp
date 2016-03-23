@@ -49,22 +49,22 @@ public class PhotoActivity extends AppCompatActivity {
                 .load(uri)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .into(imageView);
-        t = new TargetPhoneGallery(getBaseContext(),getContentResolver(), name, "siclovia");
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isSaved)
-                {
-
-                    Toast.makeText(PhotoActivity.this, "Has been downloaded", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    dialog = ProgressDialog.show(PhotoActivity.this,
-                            "", "Downloading Image.....", true);
-                    Picasso.with(getBaseContext()).load(uri).into(t);
-                }
-            }
-        });
+//        t = new TargetPhoneGallery(getBaseContext(),getContentResolver(), name, "siclovia");
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isSaved)
+//                {
+//
+//                    Toast.makeText(PhotoActivity.this, "Has been downloaded", Toast.LENGTH_SHORT).show();
+//                }
+//                else {
+//                    dialog = ProgressDialog.show(PhotoActivity.this,
+//                            "", "Downloading Image.....", true);
+//                    Picasso.with(getBaseContext()).load(uri).into(t);
+//                }
+//            }
+//        });
     }
     public class TargetPhoneGallery implements Target
     {

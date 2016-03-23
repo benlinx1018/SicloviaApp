@@ -95,6 +95,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
     private ImageView bikeOption,infoOption, parkingOption;
     private TextView txtNavDate;
     private Typeface tfHelvetica;
+    View shareOption;
     @Override
     public void onOtherButtonClick(ActionSheet actionSheet, int index) {
         if (index == 0) {
@@ -167,6 +168,7 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         bikeOption = (ImageView) toolbar.findViewById(R.id.appbar_ivBike);
+
         bikeOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,12 +190,13 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
                 showInfoMenu(v);
             }
         });
-        //建立選單
+
         drawMenu = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawMenu, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawMenu.setDrawerListener(toggle);
+        //側邊選單
         txtNavDate =  (TextView)findViewById(R.id.nav_txtActDate);
         tfHelvetica = Typeface.createFromAsset(getAssets(), "fonts/helvetica.ttf");
         menuList = (ListView) findViewById(R.id.nav_lvMenu);
@@ -301,6 +304,9 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         bikeOption.setVisibility(position == 2 ? View.VISIBLE : View.INVISIBLE);
         infoOption.setVisibility(position == 2 ? View.VISIBLE : View.INVISIBLE);
         parkingOption.setVisibility(position == 2 ? View.VISIBLE : View.INVISIBLE);
+
+        shareOption = findViewById(R.id.action_option_icon);
+        shareOption.setVisibility(position!=5? View.VISIBLE : View.INVISIBLE);
 
         Fragment fragment = null;
         switch (position) {
@@ -686,9 +692,6 @@ public class RouteActivity extends AppCompatActivity implements OnMapReadyCallba
         showPopup.setAnimationStyle(R.style.Animations_GrowFromTop);
         showPopup.showAsDropDown(view);
     }
-
-
-
     private void showShareMenu(View view) {
         PopupWindow showPopup = PopupHelper
                 .newBasicPopupWindow(getApplicationContext());
